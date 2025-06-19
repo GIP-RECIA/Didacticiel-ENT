@@ -116,18 +116,6 @@ async function setUserTourComplete() {
 }
 
 async function init(_ev: Event): Promise<void> {
-  // for test only, to no display tutorial to everyone when they open the portal page
-
-  const token: { encoded: string, decoded: JWT } = await getToken(
-    import.meta.env.VITE_USER_TOKEN_URI,
-  )
-  const allowedUsers: Array<string>
-    = import.meta.env.VITE_ALLOWED_TEST_USERS.split(';')
-
-  if (!allowedUsers.includes(token.decoded.sub)) {
-    return
-  }
-
   let confUri: string | undefined
     = document.querySelector('script#didacticiel-ent')?.getAttribute('confuri')
       ?? undefined
@@ -157,7 +145,17 @@ async function init(_ev: Event): Promise<void> {
     // return
   }
 
-  startTutorial()
+  // for test only, to no display tutorial to everyone when they open the portal page
+
+  const token: { encoded: string, decoded: JWT } = await getToken(
+    import.meta.env.VITE_USER_TOKEN_URI,
+  )
+  const allowedUsers: Array<string>
+    = import.meta.env.VITE_ALLOWED_TEST_USERS.split(';')
+
+  if (allowedUsers.includes(token.decoded.sub)) {
+    startTutorial()
+  }
 }
 
 function startTutorial() {
