@@ -145,18 +145,11 @@ async function init(_ev: Event): Promise<void> {
     return
   }
 
-  if (configurationValue.tourConfig === undefined || configurationValue.stepsConfig === undefined || configurationValue.stepsConfig.length === 0) {
-    console.error('Incorrect configuration for tutorial')
-    return
-  }
-
   config = configurationValue.tourConfig
   steps = configurationValue.stepsConfig
 
   // create  event to relaunch tutorial only here, because there is no point to register if conf is missing
-
-  const buttonStartTutorial: HTMLElement = querySelectorDeep('#starter') as HTMLElement
-  buttonStartTutorial.addEventListener('click', startTutorial)
+  window.addEventListener('starter', startTutorial)
 
   // WIP: for now the tutorial open each time
   const userTutorialData: UserTour | undefined = await getUserTourComplete()
@@ -171,10 +164,15 @@ function startTutorial() {
   if (currentDrive?.isActive()) {
     return
   }
-  config!.steps = steps!.map(x => createStep(x))
-  config!.smoothScroll = true
-  config!.disableActiveInteraction = true
-  config!.allowKeyboardControl = false
+
+  if (config === undefined || steps === undefined || steps.length === 0) {
+    console.error('Incorrect configuration for tutorial')
+    return
+  }
+  config.steps = steps.map(x => createStep(x))
+  config.smoothScroll = true
+  config.disableActiveInteraction = true
+  config.allowKeyboardControl = false
   const driverObjTour = driver(config)
   currentDrive = driverObjTour
   driverObjTour.drive()
