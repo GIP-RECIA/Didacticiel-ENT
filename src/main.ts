@@ -149,7 +149,7 @@ async function init(_ev: Event): Promise<void> {
   steps = configurationValue.stepsConfig
 
   // create  event to relaunch tutorial only here, because there is no point to register if conf is missing
-  window.addEventListener('starter', startTutorial)
+  window.addEventListener('eyebrow-user-info', startTutorial)
 
   // WIP: for now the tutorial open each time
   const userTutorialData: UserTour | undefined = await getUserTourComplete()
