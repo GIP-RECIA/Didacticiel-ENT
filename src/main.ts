@@ -129,7 +129,7 @@ async function init(_ev: Event): Promise<void> {
   }
 
   let confUri: string | undefined
-    = document.querySelector('script#tutoriel-ent')?.getAttribute('confuri')
+    = document.querySelector('script#didacticiel-ent')?.getAttribute('confuri')
       ?? undefined
   if (confUri === undefined) {
     console.error('No configuration URI for tutorial')
