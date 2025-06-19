@@ -44,9 +44,14 @@ function getTitle(title: string, icon?: string): string {
 
 function getRenderLambda() {
   return () => {
-    window.document.getElementById('r-close')?.addEventListener('click', () => {
-      currentDrive?.destroy()
-    })
+    if (config?.allowClose) {
+      window.document.getElementById('r-close')?.addEventListener('click', () => {
+        currentDrive?.destroy()
+      })
+    }
+    else {
+      window.document.getElementById('r-close')?.setAttribute('hidden', 'true')
+    }
   }
 }
 
