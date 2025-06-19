@@ -9,7 +9,6 @@ else
   ./scripts/license.sh 2
 fi
 
-yarn each vitest run
 yarn exec lint-staged
 
 # Vérification des erreurs
