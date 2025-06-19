@@ -26,15 +26,9 @@ export default ({ mode }: ConfigEnv) => {
 
   return defineConfig({
     base: process.env.VITE_BASE_URI,
-    plugins: [],
-    resolve: {
-      alias: {
-        '@': fileURLToPath(new URL('./src', import.meta.url)),
-      },
-    },
     build: {
       lib: {
-        entry: './main.ts',
+        entry: './src/main.ts',
         formats: ['es'],
         name,
       },
