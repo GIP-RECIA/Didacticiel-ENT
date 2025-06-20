@@ -15,14 +15,13 @@
  */
 
 import type { JWT } from '@uportal/open-id-connect'
+
 import type { Alignment, AllowedButtons, Config, Driver, DriveStep, Side, State } from 'driver.js'
-import {
-
-  driver,
-
-} from 'driver.js'
+import { driver } from 'driver.js'
 import { querySelectorDeep } from 'query-selector-shadow-dom'
 import { getToken } from './services/soffitUtils'
+import 'driver.js/dist/driver.css'
+import './style/css/global.css'
 import 'regenerator-runtime'
 
 window.addEventListener('keyup', handleOutsideEvents)

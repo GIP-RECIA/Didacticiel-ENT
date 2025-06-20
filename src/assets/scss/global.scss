@@ -1,0 +1,177 @@
+/**
+ * Copyright (C) 2023 GIP-RECIA, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@use 'variables' as *;
+@use 'sass:map';
+@use 'buttons';
+// @use 'style';
+
+.driver-popover {
+  border-radius: 16px;
+
+  .driver-popover-arrow-side-left.driver-popover-arrow {
+    border-left-color: var(--recia-body-bg, #fff) !important ;
+  }
+
+  .driver-popover-arrow-side-right.driver-popover-arrow {
+    border-right-color: var(--recia-body-bg, #fff) !important ;
+  }
+
+  .driver-popover-arrow-side-top.driver-popover-arrow {
+    border-top-color: var(--recia-body-bg, #fff) !important ;
+  }
+
+  .driver-popover-arrow-side-bottom.driver-popover-arrow {
+    border-bottom-color: var(--recia-body-bg, #fff) !important ;
+  }
+
+  padding: 12px;
+
+  background-color: var(--recia-body-bg, #fff);
+  color: var(--recia-body-color, #000) !important ;
+  @media (width >= map.get($grid-breakpoints, md)) {
+    padding: 34px; // 34 sur PC
+    max-width: 500px;
+  }
+
+  header#driver-popover-title {
+    line-height: 0px !important;
+
+    display: flex !important;
+    flex-direction: column;
+    // gap: 12px;
+
+    height: auto;
+
+    .space {
+      display: flex;
+      justify-content: space-between;
+      #r-driver-icon {
+        width: 28px;
+        height: 28px;
+        margin: 2px;
+        font-family: 'Font Awesome 6 Free';
+        color: var(--recia-primary, blue);
+        font-size: 26px;
+      }
+
+      #r-close {
+        cursor: pointer;
+        align-self: flex-start;
+        padding: 0;
+        margin: 0;
+        background-color: transparent;
+        border: none;
+        width: 24px;
+        height: 24px;
+        padding: 5px;
+        svg {
+          width: 14px;
+          height: 14px;
+        }
+      }
+    }
+    h2 {
+      margin-top: 0px;
+    }
+  }
+
+  * {
+    font-family: 'DM Sans';
+  }
+  .driver-popover-description {
+    color: var(--recia-body-color, #000) !important ;
+    opacity: 0.8;
+    font-size: var(--recia-font-size-md, 1rem);
+    line-height: var(--recia-font-size-xl, 1.25rem);
+    height: calc(var(--recia-font-size-xl, 1.25rem) * 6); // mobile only
+    overflow: scroll; //mobile online
+  }
+
+  .driver-popover-footer {
+    .driver-popover-progress-text {
+      font-weight: bold;
+      font-size: var(--recia-font-size-sm, 0.875rem);
+      white-space: preserve nowrap;
+      color: var(--recia-body-color, #000) !important ;
+    }
+
+    // padding-top: 24px; //24 PC only
+    padding-top: 12px;
+    margin-top: 0px;
+
+    flex-direction: column;
+    gap: 10px;
+
+    // flex-wrap: nowrap !important;
+    // justify-content: space-between;
+
+    @media (width >= map.get($grid-breakpoints, md)) {
+      flex-direction: row;
+      padding-top: 24px; //24 PC only
+
+      min-width: fit-content;
+      gap: 20px;
+    }
+
+    .driver-popover-navigation-btns {
+      align-self: center;
+      gap: 12px;
+      @media (width < map.get($grid-breakpoints, md)) {
+        width: 100%; // mobile only
+        flex-direction: column;
+      }
+
+      button {
+        &.driver-popover-next-btn {
+          @extend %button-primary;
+          text-shadow: none;
+        }
+
+        &.driver-popover-prev-btn {
+          border: none;
+          @extend %button-secondary;
+          text-shadow: none;
+        }
+
+        p {
+          margin: 0px;
+        }
+
+        i {
+          // @media (width < map.get($grid-breakpoints, md)) {
+          //   display: none;
+          // }
+          font-family: 'Font Awesome 6 Free';
+        }
+        border: none;
+      }
+    }
+  }
+}
+
+// .driver-overlay.driver-overlay-animated {
+//   pointer-events: auto;
+// }
+
+// #driver-popover-content .driver-popover-navigation-btns > button[type="button"] {
+//   pointer-events: auto !important;
+// }
+
+// #driver-popover-content,
+// #driver-popover-content * {
+//   pointer-events: none !important;
+// }

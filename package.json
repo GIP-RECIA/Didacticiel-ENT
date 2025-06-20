@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "sass --update --style=expanded src/assets/scss:src/style/css && vite build",
     "preview": "vite preview",
-    "postinstall": "husky"
+    "postinstall": "husky",
+    "sass-dev": "sass --watch --update --style=expanded src/assets/scss:src/style/css"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.13.2",
@@ -22,6 +23,7 @@
     "lint-staged": "^16.0.0",
     "query-selector-shadow-dom": "^1.0.1",
     "regenerator-runtime": "^0.14.1",
+    "sass": "^1.89.2",
     "typescript": "~5.8.3",
     "vite": "^6.3.5"
   }
