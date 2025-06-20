@@ -33,6 +33,17 @@ let config: Config | undefined
 let steps: Array<StepFromJson> | undefined
 let isProcessingClic: boolean = false
 
+const breakpoints: Map<BreakpointsKeys, number> = new Map([
+  ['xs', 0],
+  ['sm', 576],
+  ['md', 768],
+  ['lg', 992],
+  ['xl', 1200],
+  ['xxl', 1400],
+])
+
+type BreakpointsKeys = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
+
 function getIcon(icon: string): string {
   return `<i id="r-driver-icon" class="${icon}"></i>`
 }
@@ -178,6 +189,7 @@ function startTutorial() {
 }
 
 function createStep(stepFromJson: StepFromJson): DriveStep {
+  const isMobile = window.innerWidth < breakpoints.get('lg')! // if < lg
   let elementToClickOnNext: HTMLElement | undefined
   if (stepFromJson.clickOnNextCssSelector !== undefined) {
     try {
@@ -210,8 +222,8 @@ function createStep(stepFromJson: StepFromJson): DriveStep {
       showButtons: stepFromJson.showButtons,
       title: getTitle(stepFromJson.title, stepFromJson.icon),
       description: stepFromJson.description,
-      side: stepFromJson.side,
-      align: stepFromJson.align,
+      side: isMobile ? stepFromJson.sideMobile : stepFromJson.side,
+      align: isMobile ? stepFromJson.alignMobile : stepFromJson.align,
       onNextClick: (
         element?: Element,
         step: DriveStep,
