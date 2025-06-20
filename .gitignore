@@ -18,6 +18,7 @@ dist-ssr
 coverage
 .env
 *.local
+public/*.json
 
 ### Tests ###
 playwright-report
