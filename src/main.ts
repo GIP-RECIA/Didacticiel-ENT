@@ -114,10 +114,12 @@ async function setUserTourComplete() {
   }
 }
 
+function getProperty(property: string): string | undefined {
+  return document.querySelector('script#didacticiel-ent')?.getAttribute(property) ?? undefined
+}
+
 async function init(_ev: Event): Promise<void> {
-  let confUri: string | undefined
-    = document.querySelector('script#didacticiel-ent')?.getAttribute('confuri')
-      ?? undefined
+  let confUri: string | undefined = getProperty('confUri')
   if (confUri === undefined) {
     console.error('No configuration URI for tutorial')
     return
