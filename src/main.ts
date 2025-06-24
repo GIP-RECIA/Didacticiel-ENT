@@ -24,6 +24,12 @@ import 'driver.js/dist/driver.css'
 import './style/css/global.css'
 import 'regenerator-runtime'
 
+declare global {
+  interface WindowEventMap {
+    'eyebrow-user-info': CustomEvent
+  }
+}
+
 window.addEventListener('keyup', handleOutsideEvents)
 window.addEventListener('click', handleOutsideEvents)
 addEventListener('DOMContentLoaded', init)
@@ -176,7 +182,12 @@ async function init(_ev: Event): Promise<void> {
   }
 }
 
-function startTutorial() {
+function startTutorial(e?: CustomEvent) {
+  if (e) {
+    if (e.detail.type !== 'starter') {
+      return
+    }
+  }
   if (currentDrive?.isActive()) {
     return
   }
