@@ -32,6 +32,8 @@ let currentDrive: Driver | undefined
 let config: Config | undefined
 let steps: Array<StepFromJson> | undefined
 let isProcessingClic: boolean = false
+let getUserTourUri: string
+let setUserTourUri: string
 
 const breakpoints: Map<BreakpointsKeys, number> = new Map([
   ['xs', 0],
@@ -91,7 +93,7 @@ interface UserTour {
 const completeKey: string = 'COMPLETED'
 
 async function getUserTourComplete() {
-  const url = import.meta.env.VITE_GET_USER_TOUR
+  const url = getUserTourUri
   try {
     const response = await fetch(url)
     if (!response.ok) {
@@ -107,7 +109,7 @@ async function getUserTourComplete() {
 }
 
 async function setUserTourComplete() {
-  const url = import.meta.env.VITE_SET_USER_TOUR
+  const url = setUserTourUri
   const map = new Map<string, boolean>()
   map.set(completeKey, true)
   const userTour: UserTour = { tutorial: [completeKey] }
@@ -135,6 +137,10 @@ async function init(_ev: Event): Promise<void> {
     console.error('No configuration URI for tutorial')
     return
   }
+
+  getUserTourUri = getProperty('getUserTourUri') ?? ''
+  setUserTourUri = getProperty('setUserTourUri') ?? ''
+
   confUri = import.meta.env.VITE_BASE_URI + confUri
   const configurationValue:
     | { tourConfig: Config, stepsConfig: StepFromJson[] }
