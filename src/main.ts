@@ -15,7 +15,6 @@
  */
 
 import type { JWT } from '@uportal/open-id-connect'
-
 import type { Alignment, AllowedButtons, Config, Driver, DriveStep, Side, State } from 'driver.js'
 import { driver } from 'driver.js'
 import { querySelectorDeep } from 'query-selector-shadow-dom'
@@ -30,9 +29,15 @@ declare global {
   }
 }
 
-window.addEventListener('keyup', handleOutsideEvents)
-window.addEventListener('click', handleOutsideEvents)
-addEventListener('DOMContentLoaded', init)
+let interceptEventOnPageExceptPopover: EventListenerOrEventListenerObject | undefined
+let interceptEventOnPopover: EventListenerOrEventListenerObject | undefined
+let clickAllowList: string | undefined
+const classMarkedPopover = 'marked-popover'
+const selectorMarkedPopover = `.${classMarkedPopover}`
+const selectorDriverPopover = '.driver-popover'
+type BreakpointsKeys = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
+let previousHtmlOveflowValue: string
+let html: HTMLElement | undefined
 
 let currentDrive: Driver | undefined
 let config: Config | undefined
@@ -40,6 +45,96 @@ let steps: Array<StepFromJson> | undefined
 let isProcessingClic: boolean = false
 let getUserTourUri: string
 let setUserTourUri: string
+
+function prepareEvents() {
+  interceptEventOnPageExceptPopover = (e) => {
+    if (e.type === 'keyup') {
+      const ke = e as KeyboardEvent
+      if (ke.key === 'Enter') {
+        const popover = document.querySelector('.driver-popover')
+        // keyup Enter -> emit par la nouvelle modale, car le keydown a provoqué le changement de modal, la nouvelle modale n'a pas encore
+        // posé ses event listener pour intercepter l'event, dans ce cas précis on va l'intercepter dans cette callback
+        if (popover === null || !popover.classList.contains(classMarkedPopover)) {
+          // le check de classList permet de savoir si les listeners ont été posé ou non
+          e.stopPropagation()
+          e.preventDefault()
+        }
+      }
+    }
+
+    const target = e.target as HTMLElement
+    const isInsideDriverPopover = target.closest(selectorDriverPopover) !== null
+
+    let foundTargetInChild = false
+    if (clickAllowList && e.type === 'click') {
+      foundTargetInChild = querySelectorDeep(clickAllowList, target) !== null
+    }
+
+    if (!isInsideDriverPopover && !foundTargetInChild) {
+      // on ne bloque que les clics et keyups qui ont eu dehors de la modale et que s'ils ne sont pas sur un élément de la allowList
+      // la allowList existe car on veut laisser passer des clics lors des onNextClick et des onPreviousClick
+      e.stopPropagation()
+      e.preventDefault()
+    }
+  }
+
+  interceptEventOnPopover = (e) => {
+    e.stopPropagation()
+    e.preventDefault()
+  }
+}
+
+prepareEvents()
+
+function enableClickInterception() {
+  html = document.querySelector('html')!
+  previousHtmlOveflowValue = html.style.overflow
+  html.style.overflow = 'hidden'
+
+  if (interceptEventOnPageExceptPopover !== undefined) {
+    ['click', 'keyup'].forEach(evt => window.addEventListener(evt, interceptEventOnPageExceptPopover!, { capture: true, once: false }))
+  }
+  enableClickInterceptionPopover()
+}
+
+async function enableClickInterceptionPopover() {
+  await waitForElement('.driver-popover', 5000, selectorMarkedPopover)
+  const popover = document.querySelector('.driver-popover')
+  if (popover && interceptEventOnPopover) {
+    ['click'].forEach(evt => popover.addEventListener(evt, interceptEventOnPopover!, { capture: false, once: false }))
+
+    // popover.addEventListener('click', interceptEventOnPopover, { capture: false, once: false })
+    popover.classList.add(classMarkedPopover)
+
+    const btns = document.querySelectorAll('.driver-popover-navigation-btns button')
+    btns.forEach((elem) => {
+      elem.addEventListener('click', () => {
+        // e.stopPropagation()
+        // e.preventDefault()
+      }, { capture: true, once: false })
+    })
+
+    btns.forEach((elem) => {
+      elem.addEventListener('keyup', (e) => {
+        if (e.key !== 'Tab')
+          e.stopPropagation()
+        // e.preventDefault()
+      }, { capture: true, once: false })
+    })
+  }
+}
+
+function disableClickInterception() {
+  if (interceptEventOnPageExceptPopover) {
+    ['click', 'keyup'].forEach(evt => window.removeEventListener(evt, interceptEventOnPageExceptPopover!, true))
+  }
+
+  const popover = document.querySelector('.driver-popover')
+
+  if (popover && interceptEventOnPopover) {
+    popover.removeEventListener('click', interceptEventOnPopover)
+  }
+}
 
 const breakpoints: Map<BreakpointsKeys, number> = new Map([
   ['xs', 0],
@@ -49,8 +144,6 @@ const breakpoints: Map<BreakpointsKeys, number> = new Map([
   ['xl', 1200],
   ['xxl', 1400],
 ])
-
-type BreakpointsKeys = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
 
 function getIcon(icon: string): string {
   return `<i id="r-driver-icon" class="${icon}"></i>`
@@ -70,12 +163,6 @@ function getRenderLambda() {
     else {
       window.document.getElementById('r-close')?.setAttribute('hidden', 'true')
     }
-  }
-}
-
-function handleOutsideEvents(ev: Event) {
-  if (currentDrive?.isActive()) {
-    ev.stopImmediatePropagation()
   }
 }
 
@@ -114,6 +201,12 @@ async function getUserTourComplete() {
   }
 }
 
+function onEndOfTour() {
+  disableClickInterception() // restore event propagation
+  html!.style.overflow = previousHtmlOveflowValue! // restore scroll
+  setUserTourComplete()
+}
+
 async function setUserTourComplete() {
   const url = setUserTourUri
   const map = new Map<string, boolean>()
@@ -137,7 +230,7 @@ function getProperty(property: string): string | undefined {
   return document.querySelector('script#didacticiel-ent')?.getAttribute(property) ?? undefined
 }
 
-async function init(_ev: Event): Promise<void> {
+async function init(): Promise<void> {
   let confUri: string | undefined = getProperty('confUri')
   if (confUri === undefined) {
     console.error('No configuration URI for tutorial')
@@ -161,12 +254,12 @@ async function init(_ev: Event): Promise<void> {
   steps = configurationValue.stepsConfig
 
   // create  event to relaunch tutorial only here, because there is no point to register if conf is missing
-  window.addEventListener('eyebrow-user-info', startTutorial)
+  document.addEventListener('eyebrow-user-info', startTutorial)
 
   // WIP: for now the tutorial open each time
   const userTutorialData: UserTour | undefined = await getUserTourComplete()
   if (userTutorialData?.tutorial.includes(completeKey)) {
-    // return
+    return
   }
 
   // for test only, to no display tutorial to everyone when they open the portal page
@@ -174,17 +267,18 @@ async function init(_ev: Event): Promise<void> {
   const token: { encoded: string, decoded: JWT } = await getToken(
     import.meta.env.VITE_USER_TOKEN_URI,
   )
-  const allowedUsers: Array<string>
-    = import.meta.env.VITE_ALLOWED_TEST_USERS.split(';')
+  const allowedUsers: Array<string> = import.meta.env.VITE_ALLOWED_TEST_USERS.split(';')
+  return
 
   if (allowedUsers.includes(token.decoded.sub)) {
     startTutorial()
   }
 }
 
-function startTutorial(e?: CustomEvent) {
-  if (e) {
-    if (e.detail.type !== 'starter') {
+async function startTutorial(evt?: Event): Promise<void> {
+  if (evt) {
+    const cevt = evt as CustomEvent
+    if (cevt.detail.type !== 'starter') {
       return
     }
   }
@@ -196,16 +290,23 @@ function startTutorial(e?: CustomEvent) {
     console.error('Incorrect configuration for tutorial')
     return
   }
-  config.steps = steps.map(x => createStep(x))
+  config.steps = []
+
+  for (let index = 0; index < steps.length; index++) {
+    // const nextStep = index === steps.length - 1 ? undefined : steps[index + 1]
+    config.steps.push(createStep(steps[index], steps[index + 1], steps[index - 1]))
+  }
   config.smoothScroll = true
   config.disableActiveInteraction = true
   config.allowKeyboardControl = false
   const driverObjTour = driver(config)
   currentDrive = driverObjTour
   driverObjTour.drive()
+  await waitForElement(selectorDriverPopover)
+  enableClickInterception()
 }
 
-function createStep(stepFromJson: StepFromJson): DriveStep {
+function createStep(stepFromJson: StepFromJson, nextStep: StepFromJson | undefined, previousStep: StepFromJson | undefined): DriveStep {
   const isMobile = window.innerWidth < breakpoints.get('lg')! // if < lg
   let elementToClickOnNext: HTMLElement | undefined
   if (stepFromJson.clickOnNextCssSelector !== undefined) {
@@ -232,7 +333,6 @@ function createStep(stepFromJson: StepFromJson): DriveStep {
     }
   }
   return {
-    // element: stepFromJson.element,
     element: querySelectorDeep(stepFromJson.element) ?? undefined,
 
     popover: {
@@ -241,43 +341,100 @@ function createStep(stepFromJson: StepFromJson): DriveStep {
       description: stepFromJson.description,
       side: isMobile ? stepFromJson.sideMobile : stepFromJson.side,
       align: isMobile ? stepFromJson.alignMobile : stepFromJson.align,
-      onNextClick: (
-        element?: Element,
-        step: DriveStep,
-        options: { config: Config, state: State, driver: Driver },
-      ) => {
-        isProcessingClic = true
 
-        if (elementToClickOnNext) {
-          elementToClickOnNext.click()
-        }
-        if (!options.driver.hasNextStep()) {
-          setUserTourComplete()
-        }
-        currentDrive?.moveNext()
-        isProcessingClic = false
-      },
-      onPrevClick: (
+      onNextClick: async (
         element?: Element,
         step: DriveStep,
         options: { config: Config, state: State, driver: Driver },
       ) => {
+        // prevent fast multi click to affect behavior
+        // this is used only in onNextClick and onPrevClick
         if (isProcessingClic) {
           return
         }
+        isProcessingClic = true
+
+        if (elementToClickOnNext) {
+          await waitForElement(stepFromJson!.clickOnNextCssSelector!)
+          // add the target element to be clicked then remove it just after
+          clickAllowList = stepFromJson!.clickOnNextCssSelector!
+          elementToClickOnNext.click()
+          clickAllowList = undefined
+        }
+        if (!options.driver.hasNextStep()) {
+          onEndOfTour()
+          currentDrive?.moveNext()
+        }
+
+        if (nextStep) {
+          // before going to next step that will target visualy the next element, make sure it's available
+          await waitForElement(nextStep.element)
+          currentDrive?.moveNext()
+          // place listener on the new popover
+          await enableClickInterceptionPopover()
+        }
+
+        // re enable click
+        isProcessingClic = false
+      },
+      onPrevClick: async (
+        element?: Element,
+        step: DriveStep,
+        options: { config: Config, state: State, driver: Driver },
+      ) => {
+        // should not happen
         if (!options.driver.hasPreviousStep) {
+          return
+        }
+
+        // prevent fast multi click to affect behavior
+        // this is used only in onNextClick and onPrevClick
+        if (isProcessingClic) {
           return
         }
         isProcessingClic = true
         if (elementToClickOnPrev) {
+          await waitForElement(stepFromJson!.clickOnPrevCssSelector!)
+          // add the target element to be clicked then remove it just after
+          clickAllowList = stepFromJson!.clickOnPrevCssSelector!
           elementToClickOnPrev.click()
+          clickAllowList = undefined
         }
-        currentDrive?.movePrevious()
+
+        if (previousStep) {
+          // before going to previous step that will target visualy the previous element, make sure it's available
+          await waitForElement(previousStep.element)
+          currentDrive?.movePrevious()
+          // place listener on the new popover
+          enableClickInterceptionPopover()
+        }
         isProcessingClic = false
       },
       onPopoverRender: getRenderLambda(),
     },
   }
+}
+
+function waitForElement(selector: string, timeout = 3000, negativeSelector?: string) {
+  // negative selector is used when waiting for the previous popover to be destoyed, and the new one to be created,
+  // the new one will be lacking a class, so negative selector allow us to know its the new one we're finding
+  return new Promise((resolve, reject) => {
+    const intervalTime = 50
+    let timePassed = 0
+    const interval = setInterval(() => {
+      const element = querySelectorDeep(selector)
+      if (element && element.offsetParent !== null && negativeSelector ? !element.matches(negativeSelector) : true) {
+        clearInterval(interval)
+        resolve(element)
+      }
+      else if (timePassed >= timeout) {
+        clearInterval(interval)
+        reject(new Error(`Element not found in time: ${selector}`))
+      }
+
+      timePassed += intervalTime
+    }, intervalTime)
+  })
 }
 
 async function getConfJson(
@@ -298,3 +455,17 @@ async function getConfJson(
     console.error(error.message)
   }
 }
+
+// wait for dom to be loaded before invoking callback
+function onDOMContentLoaded(callback: (() => void) | (() => Promise<void>)): void {
+  // if DOM is still loading
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', callback)
+  }
+  // if DOM is already loaded
+  else {
+    callback()
+  }
+}
+
+onDOMContentLoaded(init)
