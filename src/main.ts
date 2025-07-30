@@ -40,11 +40,17 @@ let previousHtmlOveflowValue: string
 let html: HTMLElement | undefined
 
 let currentDrive: Driver | undefined
-let config: Config | undefined
+let tourConfig: Config | undefined
 let steps: Array<StepFromJson> | undefined
 let isProcessingClic: boolean = false
 let getUserTourUri: string
 let setUserTourUri: string
+
+let pretourStep: StepFromJson | undefined
+let pretourConfig: Config | undefined
+
+const completeKey: string = 'COMPLETED'
+const deniedKey: string = 'DENIED'
 
 function prepareEvents() {
   interceptEventOnPageExceptPopover = (e) => {
@@ -155,7 +161,7 @@ function getTitle(title: string, icon?: string): string {
 
 function getRenderLambda() {
   return () => {
-    if (config?.allowClose) {
+    if (tourConfig?.allowClose) {
       window.document.getElementById('r-close')?.addEventListener('click', () => {
         currentDrive?.destroy()
       })
@@ -183,7 +189,6 @@ interface StepFromJson {
 interface UserTour {
   tutorial: Array<string>
 }
-const completeKey: string = 'COMPLETED'
 
 async function getUserTourComplete() {
   const url = getUserTourUri
@@ -226,6 +231,25 @@ async function setUserTourComplete() {
   }
 }
 
+async function setUserTourDenied() {
+  const url = setUserTourUri
+  const map = new Map<string, boolean>()
+  map.set(completeKey, true)
+  const userTour: UserTour = { tutorial: [deniedKey] }
+  try {
+    const response = await fetch(url, {
+      method: 'PUT',
+      body: JSON.stringify(userTour),
+    })
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`)
+    }
+  }
+  catch (error: any) {
+    console.error(error.message)
+  }
+}
+
 function getProperty(property: string): string | undefined {
   return document.querySelector('script#didacticiel-ent')?.getAttribute(property) ?? undefined
 }
@@ -242,7 +266,7 @@ async function init(): Promise<void> {
 
   confUri = import.meta.env.VITE_BASE_URI + confUri
   const configurationValue:
-    | { tourConfig: Config, stepsConfig: StepFromJson[] }
+    | { tourConfig: Config, stepsConfig: StepFromJson[], pretourStepConfig: StepFromJson, pretourConfig: Config, pretourCustomConfig: any }
     | undefined = await getConfJson(confUri)
 
   if (configurationValue === undefined) {
@@ -250,8 +274,12 @@ async function init(): Promise<void> {
     return
   }
 
-  config = configurationValue.tourConfig
+  tourConfig = configurationValue.tourConfig
   steps = configurationValue.stepsConfig
+  pretourStep = configurationValue.pretourStepConfig
+  pretourConfig = configurationValue.pretourConfig
+
+  const askEachTimeUntilCompleted = configurationValue.pretourCustomConfig.askEachTimeUntilCompleted
 
   // create  event to relaunch tutorial only here, because there is no point to register if conf is missing
   document.addEventListener('eyebrow-user-info', startTutorial)
@@ -259,6 +287,9 @@ async function init(): Promise<void> {
   // WIP: for now the tutorial open each time
   const userTutorialData: UserTour | undefined = await getUserTourComplete()
   if (userTutorialData?.tutorial.includes(completeKey)) {
+    // return
+  }
+  if (userTutorialData?.tutorial.includes(deniedKey) && !askEachTimeUntilCompleted) {
     return
   }
 
@@ -268,11 +299,29 @@ async function init(): Promise<void> {
     import.meta.env.VITE_USER_TOKEN_URI,
   )
   const allowedUsers: Array<string> = import.meta.env.VITE_ALLOWED_TEST_USERS.split(';')
-  return
 
   if (allowedUsers.includes(token.decoded.sub)) {
-    startTutorial()
+    askForTutorial()
   }
+}
+
+async function askForTutorial() {
+  if (pretourConfig === undefined || pretourStep === undefined) {
+    console.error('Incorrect configuration for tutorial')
+    return
+  }
+  pretourConfig.steps = []
+  pretourConfig.steps.push(preTourCreateStep(pretourStep))
+  pretourConfig.steps.push(preTourCreateStep(pretourStep))
+  pretourConfig.smoothScroll = true
+  pretourConfig.disableActiveInteraction = true
+  pretourConfig.allowKeyboardControl = false
+
+  const driverObjTour = driver(pretourConfig)
+  currentDrive = driverObjTour
+  driverObjTour.drive(1)
+  await waitForElement(selectorDriverPopover)
+  enableClickInterception()
 }
 
 async function startTutorial(evt?: Event): Promise<void> {
@@ -286,24 +335,48 @@ async function startTutorial(evt?: Event): Promise<void> {
     return
   }
 
-  if (config === undefined || steps === undefined || steps.length === 0) {
+  if (tourConfig === undefined || steps === undefined || steps.length === 0) {
     console.error('Incorrect configuration for tutorial')
     return
   }
-  config.steps = []
+  tourConfig.steps = []
 
   for (let index = 0; index < steps.length; index++) {
     // const nextStep = index === steps.length - 1 ? undefined : steps[index + 1]
-    config.steps.push(createStep(steps[index], steps[index + 1], steps[index - 1]))
+    tourConfig.steps.push(createStep(steps[index], steps[index + 1], steps[index - 1]))
   }
-  config.smoothScroll = true
-  config.disableActiveInteraction = true
-  config.allowKeyboardControl = false
-  const driverObjTour = driver(config)
+  tourConfig.smoothScroll = true
+  tourConfig.disableActiveInteraction = true
+  tourConfig.allowKeyboardControl = false
+  tourConfig.onDestroyed = () => {
+    disableClickInterception()
+  }
+  const driverObjTour = driver(tourConfig)
   currentDrive = driverObjTour
   driverObjTour.drive()
   await waitForElement(selectorDriverPopover)
   enableClickInterception()
+}
+
+function preTourCreateStep(stepFromJson: StepFromJson): DriveStep {
+  return {
+    element: undefined,
+    popover: {
+      showButtons: stepFromJson.showButtons,
+      title: stepFromJson.title,
+      description: stepFromJson.description,
+      onNextClick: async () => {
+        currentDrive?.destroy()
+        disableClickInterception()
+        startTutorial()
+      },
+      onPrevClick: async () => {
+        currentDrive?.destroy()
+        setUserTourDenied()
+        disableClickInterception()
+      },
+    },
+  }
 }
 
 function createStep(stepFromJson: StepFromJson, nextStep: StepFromJson | undefined, previousStep: StepFromJson | undefined): DriveStep {
