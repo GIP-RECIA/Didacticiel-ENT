@@ -290,10 +290,10 @@ async function init(): Promise<void> {
 
   // WIP: for now the tutorial open each time
   const userTutorialData: UserTour | undefined = await getUserTourComplete()
-  if (userTutorialData?.tutorial.includes(completeKey)) {
+  if (userTutorialData?.tutorial?.includes(completeKey)) {
     // return
   }
-  if (userTutorialData?.tutorial.includes(deniedKey) && !askEachTimeUntilCompleted) {
+  if (userTutorialData?.tutorial?.includes(deniedKey) && !askEachTimeUntilCompleted) {
     return
   }
 
