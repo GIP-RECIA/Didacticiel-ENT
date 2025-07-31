@@ -48,6 +48,8 @@ let setUserTourUri: string
 
 let pretourStep: StepFromJson | undefined
 let pretourConfig: Config | undefined
+let startEventName: string = ''
+let askEachTimeUntilCompleted: boolean = false
 
 const completeKey: string = 'COMPLETED'
 const deniedKey: string = 'DENIED'
@@ -262,6 +264,10 @@ function getProperty(property: string): string | undefined {
   return document.querySelector('script#didacticiel-ent')?.getAttribute(property) ?? undefined
 }
 
+function hasProperty(property: string): boolean {
+  return !!document.querySelector('script#didacticiel-ent')?.getAttribute(property)
+}
+
 async function init(): Promise<void> {
   let confUri: string | undefined = getProperty('confUri')
   if (confUri === undefined) {
@@ -271,7 +277,8 @@ async function init(): Promise<void> {
 
   getUserTourUri = getProperty('getUserTourUri') ?? ''
   setUserTourUri = getProperty('setUserTourUri') ?? ''
-
+  startEventName = getProperty('startEventName') ?? 'launch-starter'
+  askEachTimeUntilCompleted = hasProperty('askEachTime')
   confUri = import.meta.env.VITE_BASE_URI + confUri
   const configurationValue:
     { tourConfig: Config, stepsConfig: StepFromJson[], pretourStepConfig: StepFromJson, pretourConfig: Config }
@@ -287,10 +294,9 @@ async function init(): Promise<void> {
   pretourStep = configurationValue.pretourStepConfig
   pretourConfig = configurationValue.pretourConfig
 
-  const askEachTimeUntilCompleted = configurationValue.pretourCustomConfig.askEachTimeUntilCompleted
-
   // create  event to relaunch tutorial only here, because there is no point to register if conf is missing
   document.addEventListener('eyebrow-user-info', startTutorial)
+  document.addEventListener(startEventName, startTutorial)
 
   // WIP: for now the tutorial open each time
   const userTutorialData: UserTour | undefined = await getUserTourComplete()
@@ -335,7 +341,7 @@ async function askForTutorial() {
 async function startTutorial(evt?: Event): Promise<void> {
   if (evt) {
     const cevt = evt as CustomEvent
-    if (cevt.detail.type !== 'starter') {
+    if (cevt && cevt.detail && cevt.detail.type && cevt.detail.type !== 'starter') {
       return
     }
   }
