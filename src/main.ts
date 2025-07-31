@@ -288,7 +288,6 @@ async function init(): Promise<void> {
   pretourConfig = configurationValue.pretourConfig
 
   // create  event to relaunch tutorial only here, because there is no point to register if conf is missing
-  document.addEventListener('eyebrow-user-info', startTutorial)
   document.addEventListener(startEventName, startTutorial)
 
   // WIP: for now the tutorial open each time
@@ -332,13 +331,7 @@ async function askForTutorial() {
   enableClickInterception()
 }
 
-async function startTutorial(evt?: Event): Promise<void> {
-  if (evt) {
-    const cevt = evt as CustomEvent
-    if (cevt && cevt.detail && cevt.detail.type && cevt.detail.type !== 'starter') {
-      return
-    }
-  }
+async function startTutorial(): Promise<void> {
   if (currentDrive?.isActive()) {
     return
   }
