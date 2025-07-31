@@ -116,13 +116,6 @@ async function enableClickInterceptionPopover() {
 
     const btns = document.querySelectorAll('.driver-popover-navigation-btns button')
     btns.forEach((elem) => {
-      elem.addEventListener('click', () => {
-        // e.stopPropagation()
-        // e.preventDefault()
-      }, { capture: true, once: false })
-    })
-
-    btns.forEach((elem) => {
       elem.addEventListener('keyup', (e) => {
         if (e.key !== 'Tab')
           e.stopPropagation()
