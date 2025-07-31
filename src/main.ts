@@ -498,7 +498,7 @@ function waitForElement(selector: string, timeout = 3000, negativeSelector?: str
     let timePassed = 0
     const interval = setInterval(() => {
       const element = querySelectorDeep(selector)
-      if (element && element.offsetParent !== null && negativeSelector ? !element.matches(negativeSelector) : true) {
+      if (element !== null && element.offsetParent !== null && (negativeSelector ? !element.matches(negativeSelector) : true)) {
         clearInterval(interval)
         resolve(element)
       }
