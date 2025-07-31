@@ -125,9 +125,6 @@
     flex-direction: column;
     gap: 10px;
 
-    // flex-wrap: nowrap !important;
-    // justify-content: space-between;
-
     @media (width >= map.get($grid-breakpoints, md)) {
       flex-direction: row;
       padding-top: 24px; //24 PC only
@@ -161,9 +158,6 @@
         }
 
         i {
-          // @media (width < map.get($grid-breakpoints, md)) {
-          //   display: none;
-          // }
           font-family: 'Font Awesome 6 Free';
         }
         border: none;
@@ -171,16 +165,3 @@
     }
   }
 }
-
-// .driver-overlay.driver-overlay-animated {
-//   pointer-events: auto;
-// }
-
-// #driver-popover-content .driver-popover-navigation-btns > button[type="button"] {
-//   pointer-events: auto !important;
-// }
-
-// #driver-popover-content,
-// #driver-popover-content * {
-//   pointer-events: none !important;
-// }
