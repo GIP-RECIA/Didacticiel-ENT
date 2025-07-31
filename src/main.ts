@@ -164,13 +164,14 @@ function getTitle(title: string, tourConfig?: Config): string {
 
 function getRenderLambda() {
   return () => {
-    if (tourConfig?.allowClose) {
-      window.document.getElementById('r-close')?.addEventListener('click', () => {
+    const btn = window.document.getElementById('r-close') as HTMLElement
+    if (tourConfig?.allowClose && btn) {
+      btn.addEventListener('click', () => {
         currentDrive?.destroy()
       })
     }
-    else {
-      window.document.getElementById('r-close')?.setAttribute('hidden', 'true')
+    else if (btn) {
+      btn.style.visibility = 'hidden'
     }
   }
 }
