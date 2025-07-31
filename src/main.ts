@@ -151,12 +151,15 @@ const breakpoints: Map<BreakpointsKeys, number> = new Map([
   ['xxl', 1400],
 ])
 
-function getIcon(icon: string): string {
+function _getIcon(icon: string): string {
   return `<i id="r-driver-icon" class="${icon}"></i>`
 }
 
-function getTitle(title: string, icon?: string): string {
-  return `<div class="space">${icon ? getIcon(icon) : ''} <button id="r-close" src="https://placehold.co/20"><svg class="fontawesome" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg></button></div><h2>${title}</h2>`
+function getBtnClose(): string {
+  return '<button id="r-close" src="https://placehold.co/20"><svg class="fontawesome" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg></button>'
+}
+function getTitle(title: string, tourConfig?: Config): string {
+  return `<div class="toRight">${tourConfig?.allowClose ? getBtnClose() : ''}</div><h2>${title}</h2>`
 }
 
 function getRenderLambda() {
@@ -343,7 +346,7 @@ async function startTutorial(evt?: Event): Promise<void> {
 
   for (let index = 0; index < steps.length; index++) {
     // const nextStep = index === steps.length - 1 ? undefined : steps[index + 1]
-    tourConfig.steps.push(createStep(steps[index], steps[index + 1], steps[index - 1]))
+    tourConfig.steps.push(createStep(steps[index], steps[index + 1], steps[index - 1], tourConfig))
   }
   tourConfig.smoothScroll = true
   tourConfig.disableActiveInteraction = true
@@ -379,7 +382,7 @@ function preTourCreateStep(stepFromJson: StepFromJson): DriveStep {
   }
 }
 
-function createStep(stepFromJson: StepFromJson, nextStep: StepFromJson | undefined, previousStep: StepFromJson | undefined): DriveStep {
+function createStep(stepFromJson: StepFromJson, nextStep: StepFromJson | undefined, previousStep: StepFromJson | undefined, tourConfig: Config | undefined): DriveStep {
   const isMobile = window.innerWidth < breakpoints.get('lg')! // if < lg
   let elementToClickOnNext: HTMLElement | undefined
   if (stepFromJson.clickOnNextCssSelector !== undefined) {
@@ -410,7 +413,7 @@ function createStep(stepFromJson: StepFromJson, nextStep: StepFromJson | undefin
 
     popover: {
       showButtons: stepFromJson.showButtons,
-      title: getTitle(stepFromJson.title, stepFromJson.icon),
+      title: getTitle(stepFromJson.title, tourConfig),
       description: stepFromJson.description,
       side: isMobile ? stepFromJson.sideMobile : stepFromJson.side,
       align: isMobile ? stepFromJson.alignMobile : stepFromJson.align,
