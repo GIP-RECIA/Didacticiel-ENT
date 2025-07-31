@@ -317,6 +317,7 @@ async function askForTutorial() {
     return
   }
   pretourConfig.steps = []
+  // create step twice because the second one is the only one used, the first make the previous button available, but its behavior is overriden
   pretourConfig.steps.push(preTourCreateStep(pretourStep))
   pretourConfig.steps.push(preTourCreateStep(pretourStep))
   pretourConfig.smoothScroll = true
