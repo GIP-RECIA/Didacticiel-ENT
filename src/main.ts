@@ -323,6 +323,7 @@ async function askForTutorial() {
   pretourConfig.smoothScroll = true
   pretourConfig.disableActiveInteraction = true
   pretourConfig.allowKeyboardControl = false
+  pretourConfig.allowClose = false
 
   const driverObjTour = driver(pretourConfig)
   currentDrive = driverObjTour
