@@ -274,7 +274,7 @@ async function init(): Promise<void> {
 
   confUri = import.meta.env.VITE_BASE_URI + confUri
   const configurationValue:
-    | { tourConfig: Config, stepsConfig: StepFromJson[], pretourStepConfig: StepFromJson, pretourConfig: Config, pretourCustomConfig: any }
+    { tourConfig: Config, stepsConfig: StepFromJson[], pretourStepConfig: StepFromJson, pretourConfig: Config }
     | undefined = await getConfJson(confUri)
 
   if (configurationValue === undefined) {
@@ -521,7 +521,7 @@ function waitForElement(selector: string, timeout = 3000, negativeSelector?: str
 
 async function getConfJson(
   url: string,
-): Promise<{ tourConfig: Config, stepsConfig: StepFromJson[] } | undefined> {
+): Promise<{ tourConfig: Config, stepsConfig: StepFromJson[], pretourStepConfig: StepFromJson, pretourConfig: Config } | undefined> {
   try {
     const response = await fetch(url)
     if (!response.ok) {
@@ -530,7 +530,7 @@ async function getConfJson(
 
     const json = await response.json()
 
-    const values: { tourConfig: Config, stepsConfig: StepFromJson[] } = json
+    const values: { tourConfig: Config, stepsConfig: StepFromJson[], pretourStepConfig: StepFromJson, pretourConfig: Config } = json
     return values
   }
   catch (error: any) {
