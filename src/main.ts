@@ -358,6 +358,7 @@ async function startTutorial(evt?: Event): Promise<void> {
   tourConfig.allowKeyboardControl = false
   tourConfig.onDestroyed = () => {
     disableClickInterception()
+    resetStyleOverflow()
   }
   const driverObjTour = driver(tourConfig)
   currentDrive = driverObjTour
