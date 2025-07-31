@@ -107,7 +107,7 @@ async function enableClickInterceptionPopover() {
   await waitForElement('.driver-popover', 5000, selectorMarkedPopover)
   const popover = document.querySelector('.driver-popover')
   if (popover && interceptEventOnPopover) {
-    ['click'].forEach(evt => popover.addEventListener(evt, interceptEventOnPopover!, { capture: false, once: false }))
+    ['click', 'keyup'].forEach(evt => popover.addEventListener(evt, interceptEventOnPopover!, { capture: false, once: false }))
 
     // popover.addEventListener('click', interceptEventOnPopover, { capture: false, once: false })
     popover.classList.add(classMarkedPopover)
