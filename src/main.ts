@@ -212,8 +212,12 @@ async function getUserTourComplete() {
 
 function onEndOfTour() {
   disableClickInterception() // restore event propagation
-  html!.style.overflow = previousHtmlOveflowValue! // restore scroll
+  resetStyleOverflow()
   setUserTourComplete()
+}
+
+function resetStyleOverflow() {
+  html!.style.overflow = previousHtmlOveflowValue! // restore scroll
 }
 
 async function setUserTourComplete() {
