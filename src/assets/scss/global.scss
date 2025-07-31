@@ -88,6 +88,9 @@
           align-self: center;
           justify-self: center;
         }
+        &:focus {
+          outline: solid var(--recia-primary) 2px;
+        }
       }
     }
     h2 {
