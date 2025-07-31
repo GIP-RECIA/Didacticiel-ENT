@@ -378,7 +378,7 @@ function preTourCreateStep(stepFromJson: StepFromJson): DriveStep {
     element: undefined,
     popover: {
       showButtons: stepFromJson.showButtons,
-      title: stepFromJson.title,
+      title: getTitle(stepFromJson.title),
       description: stepFromJson.description,
       onNextClick: async () => {
         currentDrive?.destroy()
