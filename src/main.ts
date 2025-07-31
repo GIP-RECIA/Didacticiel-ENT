@@ -343,7 +343,6 @@ async function startTutorial(): Promise<void> {
   tourConfig.steps = []
 
   for (let index = 0; index < steps.length; index++) {
-    // const nextStep = index === steps.length - 1 ? undefined : steps[index + 1]
     tourConfig.steps.push(createStep(steps[index], steps[index + 1], steps[index - 1], tourConfig))
   }
   tourConfig.smoothScroll = true
