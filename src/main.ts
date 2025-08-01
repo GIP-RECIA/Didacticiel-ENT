@@ -504,6 +504,9 @@ function waitForElement(selector: string, timeout = 3000, negativeSelector?: str
       }
       else if (timePassed >= timeout) {
         clearInterval(interval)
+        currentDrive?.destroy()
+        disableClickInterception()
+        resetStyleOverflow()
         reject(new Error(`Element not found in time: ${selector}`))
       }
 
