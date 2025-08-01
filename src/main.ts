@@ -106,8 +106,7 @@ function enableClickInterception() {
 }
 
 async function enableClickInterceptionPopover() {
-  await waitForElement('.driver-popover', 5000, selectorMarkedPopover)
-  const popover = document.querySelector('.driver-popover')
+  const popover: HTMLElement = await waitForElement('.driver-popover', 5000, selectorMarkedPopover)
   if (popover && interceptEventOnPopover) {
     ['click', 'keyup'].forEach(evt => popover.addEventListener(evt, interceptEventOnPopover!, { capture: false, once: false }))
 
@@ -383,30 +382,6 @@ function preTourCreateStep(stepFromJson: StepFromJson): DriveStep {
 
 function createStep(stepFromJson: StepFromJson, nextStep: StepFromJson | undefined, previousStep: StepFromJson | undefined, tourConfig: Config | undefined): DriveStep {
   const isMobile = window.innerWidth < breakpoints.get('lg')! // if < lg
-  let elementToClickOnNext: HTMLElement | undefined
-  if (stepFromJson.clickOnNextCssSelector !== undefined) {
-    try {
-      elementToClickOnNext = querySelectorDeep(
-        `${stepFromJson.clickOnNextCssSelector}`,
-      ) as HTMLElement
-    }
-    catch {
-      elementToClickOnNext = undefined
-    }
-  }
-
-  let elementToClickOnPrev: HTMLElement | undefined
-
-  if (stepFromJson.clickOnPrevCssSelector !== undefined) {
-    try {
-      elementToClickOnPrev = querySelectorDeep(
-        `${stepFromJson.clickOnPrevCssSelector}`,
-      ) as HTMLElement
-    }
-    catch {
-      elementToClickOnPrev = undefined
-    }
-  }
   return {
     element: querySelectorDeep(stepFromJson.element) ?? undefined,
 
@@ -429,8 +404,8 @@ function createStep(stepFromJson: StepFromJson, nextStep: StepFromJson | undefin
         }
         isProcessingClic = true
 
-        if (elementToClickOnNext) {
-          await waitForElement(stepFromJson!.clickOnNextCssSelector!)
+        if (stepFromJson.clickOnNextCssSelector) {
+          const elementToClickOnNext: HTMLElement = await waitForElement(stepFromJson.clickOnNextCssSelector!)
           // add the target element to be clicked then remove it just after
           clickAllowList = stepFromJson!.clickOnNextCssSelector!
           elementToClickOnNext.click()
@@ -468,8 +443,8 @@ function createStep(stepFromJson: StepFromJson, nextStep: StepFromJson | undefin
           return
         }
         isProcessingClic = true
-        if (elementToClickOnPrev) {
-          await waitForElement(stepFromJson!.clickOnPrevCssSelector!)
+        if (stepFromJson.clickOnPrevCssSelector) {
+          const elementToClickOnPrev = await waitForElement(stepFromJson!.clickOnPrevCssSelector!)
           // add the target element to be clicked then remove it just after
           clickAllowList = stepFromJson!.clickOnPrevCssSelector!
           elementToClickOnPrev.click()
@@ -490,7 +465,7 @@ function createStep(stepFromJson: StepFromJson, nextStep: StepFromJson | undefin
   }
 }
 
-function waitForElement(selector: string, timeout = 3000, negativeSelector?: string) {
+function waitForElement(selector: string, timeout = 3000, negativeSelector?: string): Promise<HTMLElement> {
   // negative selector is used when waiting for the previous popover to be destoyed, and the new one to be created,
   // the new one will be lacking a class, so negative selector allow us to know its the new one we're finding
   return new Promise((resolve, reject) => {
