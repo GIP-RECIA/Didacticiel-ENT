@@ -262,8 +262,8 @@ function hasProperty(property: string): boolean {
 }
 
 async function init(): Promise<void> {
-  let confUri: string | undefined = getProperty('confUri')
-  if (confUri === undefined) {
+  let configUri: string | undefined = getProperty('configUri')
+  if (configUri === undefined) {
     console.error('No configuration URI for tutorial')
     return
   }
@@ -272,10 +272,10 @@ async function init(): Promise<void> {
   setUserTourUri = getProperty('setUserTourUri') ?? ''
   startEventName = getProperty('startEventName') ?? 'launch-starter'
   askEachTimeUntilCompleted = hasProperty('askEachTime')
-  confUri = import.meta.env.VITE_BASE_URI + confUri
+  configUri = import.meta.env.VITE_BASE_URI + configUri
   const configurationValue:
     { tourConfig: Config, stepsConfig: StepFromJson[], pretourStepConfig: StepFromJson, pretourConfig: Config }
-    | undefined = await getConfJson(confUri)
+    | undefined = await getConfJson(configUri)
 
   if (configurationValue === undefined) {
     console.error('No configuration for tutorial')
