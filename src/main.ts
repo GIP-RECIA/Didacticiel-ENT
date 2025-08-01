@@ -278,7 +278,7 @@ async function init(): Promise<void> {
     | undefined = await getConfJson(configUri)
 
   if (configurationValue === undefined) {
-    console.error('No configuration for tutorial')
+    console.error('No configuration for Didacticiel ENT')
     return
   }
 
