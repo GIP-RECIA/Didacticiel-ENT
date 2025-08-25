@@ -471,10 +471,11 @@ function waitForElement(selector: string, timeout = 3000, negativeSelector?: str
   return new Promise((resolve, reject) => {
     const intervalTime = 50
     let timePassed = 0
-    const interval = setInterval(() => {
+    const interval = setInterval(async () => {
       const element = querySelectorDeep(selector)
       if (element !== null && element.offsetParent !== null && (negativeSelector ? !element.matches(negativeSelector) : true)) {
         clearInterval(interval)
+        await new Promise(r => setTimeout(r, 150))
         resolve(element)
       }
       else if (timePassed >= timeout) {
