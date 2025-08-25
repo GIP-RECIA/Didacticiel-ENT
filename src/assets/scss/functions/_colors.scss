@@ -14,5 +14,6 @@
  * limitations under the License.
  */
 
-@use 'sass:map';
-@use './global.scss' as *;
+@function HEXToRGBA($hex, $alpha) {
+  @return rgba(from $hex r g b / $alpha);
+}

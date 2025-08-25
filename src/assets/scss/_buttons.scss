@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2023 GIP-RECIA, Inc.
+ * Copyright (C) 2025 GIP-RECIA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,178 +14,160 @@
  * limitations under the License.
  */
 
+@use 'sass:map';
 @use 'variables' as *;
+@use 'mixins' as *;
 
-%tag-and-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  column-gap: 8px;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  user-select: none;
-  border-radius: 50px;
-  text-decoration: none;
-  color: unset;
-}
-
-%disabled {
-  opacity: 0.33;
-  pointer-events: none;
-}
-
-%tag {
-  @extend %tag-and-button;
-  padding: 8px 16px;
-  font-family: $dm-sans;
-  font-weight: 500;
-  font-size: 14px;
-
-  &.active {
-    background-color: $basic-black;
-    color: white;
-
-    &:hover {
-      background-color: $primary;
-    }
-
-    &:focus-visible {
-      background-color: $primary;
-      color: $white;
-      outline: 3px solid $primary-20;
-    }
-  }
-
-  &:not(.active) {
-    &:hover {
-      background-color: $primary-05;
-      color: $primary;
-    }
-
-    &:focus-visible {
-      background-color: $primary-05;
-      color: $primary;
-      outline: 3px solid $primary;
-    }
-  }
-
-  &:disabled,
-  &.disabled {
-    opacity: 0.33;
-    pointer-events: none;
-  }
-}
-
-%tag-circle {
-  @extend %tag;
-  border-radius: 50%;
-  width: 34px;
-  height: 34px;
-  padding: 8px;
-}
-
-%tag-small {
-  @extend %tag;
-  padding: 4px 12px;
-}
-
-%tag-small-circle {
-  @extend %tag;
-  border-radius: 50%;
-  width: 26px;
-  height: 26px;
-  padding: 4px;
-}
-
-%button {
-  @extend %tag-and-button;
+%primary-secondary {
+  @include button-and-tag;
   padding: 12px 24px;
   font-family: $sora;
   font-weight: 600;
-  font-size: 16px;
+  font-size: var(--#{$prefix}font-size-md);
 }
 
-%button-primary {
-  @extend %button;
-  background-color: $basic-black;
-  color: $white;
+.btn {
+  &-primary {
+    @extend %primary-secondary;
+    background-color: var(--#{$prefix}btn-primary-bg-dark);
+    color: var(--#{$prefix}btn-primary-dark);
 
-  &:hover {
-    background-color: $primary;
+    &:active {
+      background-color: var(--#{$prefix}btn-primary-pressed-dark) !important;
+    }
+
+    &:hover,
+    &:focus-visible {
+      background-color: var(--#{$prefix}primary-dark);
+    }
+
+    &:focus-visible {
+      outline: 4px solid HEXToRGBA(var(--#{$prefix}primary-dark), 0.3);
+    }
+
+    &:disabled,
+    &.disabled {
+      opacity: 0.33;
+      pointer-events: none;
+    }
+
+    &.circle {
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      padding: 12px;
+    }
+
+    &.small {
+      padding: 8px 16px;
+      font-size: var(--#{$prefix}font-size-sm);
+
+      &.circle {
+        border-radius: 50%;
+        width: 34px;
+        height: 34px;
+        padding: 8px;
+      }
+    }
   }
 
-  &:focus-visible {
-    background-color: $primary;
-    outline: 4px solid $primary-20;
+  &-secondary {
+    @extend %primary-secondary;
+    background-color: var(--#{$prefix}btn-secondary-bg-dark);
+    color: var(--#{$prefix}btn-secondary-dark);
+
+    &:active {
+      background-color: var(--#{$prefix}btn-secondary-pressed) !important;
+      color: var(--#{$prefix}primary-dark) !important;
+    }
+
+    &:hover,
+    &:focus-visible {
+      background-color: var(--#{$prefix}btn-secondary-hover-dark);
+      color: var(--#{$prefix}primary-dark);
+    }
+
+    &:focus-visible {
+      outline: 4px solid var(--#{$prefix}primary-dark);
+    }
+
+    &:disabled,
+    &.disabled {
+      opacity: 0.33;
+      pointer-events: none;
+    }
+
+    &.circle {
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      padding: 12px;
+    }
+
+    &.small {
+      padding: 8px 16px;
+      font-size: var(--#{$prefix}font-size-sm);
+
+      &.circle {
+        border-radius: 50%;
+        width: 34px;
+        height: 34px;
+        padding: 8px;
+      }
+    }
   }
 
-  &:disabled,
-  &.disabled {
-    @extend %disabled;
-  }
-}
+  &-secondary-toggle {
+    @extend .btn-secondary;
+    background-color: unset;
+    color: var(--#{$prefix}btn-secondary-dark);
 
-%button-primary-circle {
-  @extend %button-primary;
-  border-radius: 50%;
-  width: 44px;
-  height: 44px;
-  padding: 12px;
-}
+    &.active {
+      background-color: var(--#{$prefix}primary-dark);
+      color: var(--#{$prefix}body-inverted);
+      box-shadow: var(--#{$prefix}shadow-hover) HEXToRGBA(var(--#{$prefix}primary-dark), 0.2);
 
-%button-secondary {
-  @extend %button;
-  background-color: $basic-grey;
-  color: $basic-black;
+      &:active {
+        background-color: var(--#{$prefix}btn-primary-pressed-dark) !important;
+        color: var(--#{$prefix}btn-primary-dark) !important;
+      }
 
-  &:hover {
-    background-color: $secondary-hover;
-    color: $primary;
+      &:focus-visible {
+        outline: 4px solid HEXToRGBA(var(--#{$prefix}primary-dark), 0.3);
+      }
+    }
   }
 
-  &:focus-visible {
-    background-color: $secondary-hover;
-    color: $primary;
-    outline: 4px solid $primary;
+  &-tertiary {
+    @include button-and-tag;
+    padding: 8px 16px;
+    font-family: $dm-sans;
+    font-weight: 600;
+    font-size: var(--#{$prefix}font-size-sm);
+    color: var(--#{$prefix}btn-secondary-dark);
+
+    &:hover,
+    &:focus-visible {
+      background-color: var(--#{$prefix}body-bg-dark);
+      color: var(--#{$prefix}primary);
+      text-decoration: underline;
+    }
+
+    &:focus-visible {
+      outline: 4px solid var(--#{$prefix}primary-dark);
+    }
+
+    &:disabled,
+    &.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    &.circle {
+      border-radius: 50%;
+      width: 34px;
+      height: 34px;
+      padding: 8px;
+    }
   }
-
-  &:disabled,
-  &.disabled {
-    @extend %disabled;
-  }
-}
-
-%button-tertiary {
-  @extend %button;
-  padding: 8px 16px;
-  font-family: $dm-sans;
-  font-weight: 600;
-  font-size: 14px;
-  border-radius: 17px;
-  color: $basic-black;
-
-  &:hover {
-    color: $primary;
-    text-decoration: underline;
-  }
-
-  &:focus-visible {
-    color: $primary;
-    text-decoration: underline;
-    outline: 4px solid $primary;
-  }
-
-  &:disabled,
-  &.disabled {
-    @extend %disabled;
-  }
-}
-
-%button-tertiary-circle {
-  @extend %button-tertiary;
-  border-radius: 50%;
-  width: 34px;
-  height: 34px;
-  padding: 8px;
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2023 GIP-RECIA, Inc.
+ * Copyright (C) 2025 GIP-RECIA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,156 @@
  * limitations under the License.
  */
 
+// Color system
+
+$white: #fff;
+$black: #000;
+
+$favorite: #ffaa46;
+$stroke: #e9e9e9; // A utiliser pour tous les contours et délimitations
+$tutorial: #171717; // Tutorial background card
+$basic-grey: #f4f4f4; // Couleur de fond du footer haut
+$basic-black: #1e1e1e; // Couleur du texte et des icônes, background color du bouton primaire par défaut
+$basic-black-lighter: #737373; // A utiliser lorsque le texte est de moindre importance
+$lighter-black: #2c2c2c; // Couleur de fond du drawer et du footer bas
+
+$system-blue: #005099;
+$system-red: #ad1919;
+
+$colors: (
+  favorite: $favorite,
+  stroke: $stroke,
+  tutorial: $tutorial,
+  basic-grey: $basic-grey,
+  basic-black: $basic-black,
+  basic-black-lighter: $basic-black-lighter,
+  lighter-black: $lighter-black,
+  system-blue: $system-blue,
+  system-red: $system-red,
+);
+
+$primary: #0062bc;
+$primary-dark: #57aeff;
+
+$hover: #f8f8f8; // Couleur des élément interaftifs en hover (ex: dropdown item)
+$hover-dark: #262626;
+
+$theme-colors: (
+  primary: $primary,
+  hover: $hover,
+);
+
+$theme-colors-dark: (
+  primary: $primary-dark,
+  hover: $hover-dark,
+);
+
+$categories: (
+  documentation: (
+    color: #ab47bc,
+    hover: (
+      color: #c400f3,
+      shadow: (
+        color: #c400f3,
+        opacity: 0.1,
+      ),
+    ),
+    text: $white,
+  ),
+  collaboratif: (
+    color: #5747bc,
+    hover: (
+      color: #665be7,
+      shadow: (
+        color: #665be7,
+        opacity: 0.15,
+      ),
+    ),
+    text: $white,
+  ),
+  apprentissage: (
+    color: #ffac2f,
+    hover: (
+      color: #f5c72e,
+      shadow: (
+        color: #9d7a06,
+        opacity: 0.15,
+      ),
+    ),
+    text: $black,
+  ),
+  vie-scolaire: (
+    color: #858585,
+    hover: (
+      color: #5b5b5b,
+      shadow: (
+        color: #161616,
+        opacity: 0.15,
+      ),
+    ),
+    text: $black,
+  ),
+  orientation: (
+    color: #26c6da,
+    hover: (
+      color: #70eaf5,
+      shadow: (
+        color: #06829d,
+        opacity: 0.15,
+      ),
+    ),
+    text: $black,
+  ),
+  parametres: (
+    color: #66bb6a,
+    hover: (
+      color: #4ef186,
+      shadow: (
+        color: #069d28,
+        opacity: 0.15,
+      ),
+    ),
+    text: $black,
+  ),
+  communication: (
+    color: #ec407a,
+    hover: (
+      color: #f60086,
+      shadow: (
+        color: #ec407a,
+        opacity: 0.2,
+      ),
+    ),
+    text: $black,
+  ),
+);
+
+// Shadow
+
+// x y blur spread
+$shadows: (
+  neutral: 0 4px 15.9px 0,
+  strong: 0 4px 24.4px 0,
+  hover: 0 4px 26px 0,
+  low-elevation: 0 2px 6px 0,
+  low-elevation-avatar-notif: 0 1px 24px 0,
+);
+
+// Prefix for :root CSS variables
+
 $prefix: recia-;
+
+// Body
+
+$body: $basic-black;
+$body-dark: $white;
+$body-inverted: $body-dark;
+$body-inverted-dark: $body;
+
+$body-bg: $white;
+$body-bg-dark: $basic-black;
+
+// Grid breakpoints
 
 $grid-breakpoints: (
   xs: 0,
@@ -25,44 +174,63 @@ $grid-breakpoints: (
   xxl: 1400px,
 );
 
-$container-max-widths: (
-  sm: 540px,
-  md: 720px,
-  lg: 960px,
-  xl: 1140px,
-  xxl: 1320px,
-);
+// Typography
+
+$font-family-sans-serif: 'sans-serif';
+$sora: 'Sora', $font-family-sans-serif;
+$dm-sans: 'DM Sans', $font-family-sans-serif;
 
 $font-size-breakpoints: (
   xxs: 0.625,
+  // 10px
   xs: 0.75,
+  // 12px
   sm: 0.875,
+  // 14px
   md: 1,
+  // 16px
   lg: 1.125,
+  // 18px
   xl: 1.25,
-  xxl: 1.5,
+  // 20px
+  xxl: 1.5, // 24px
 );
 
-$base-font-size: 16px; // 1rem
+// Buttons
 
-$sora: 'Sora', 'sans-serif';
-$dm-sans: 'DM Sans', 'sans-serif';
+// // $btn-primary: $white;
+// $btn-primary-dark: $basic-black;
+// $btn-primary-pressed: #004584;
+// $btn-primary-pressed-dark: #8AC7FF;
 
-$white: var(--#{$prefix}white, #fff);
-$stroke: var(--#{$prefix}stroke, #e9e9e9);
-$basic-grey: var(--#{$prefix}basic-grey, #f4f4f4);
-$basic-black: var(--#{$prefix}basic-black, #1e1e1e);
-$lighter-black: var(--#{$prefix}lighter-black, #2c2c2c);
+// $btn-secondary: $basic-black;
+// $btn-secondary-dark: $white;
+// $btn-secondary-hover: #E6EFF8;
+// $btn-secondary-hover-dark: #1A1F23;
+// $btn-secondary-pressed: #CCE0F2;
+// $btn-secondary-pressed-dark: #212E3A;
 
-$primary: var(--#{$prefix}primary, #0062bc);
-$primary-pressed: var(--#{$prefix}primary-pressed, #004584);
-$secondary-hover: var(--#{$prefix}secondary-hover, #e6eff8);
-$secondary-pressed: var(--#{$prefix}secondary-pressed, #cce0f2);
+// $btn-primary-bg: $basic-black;
+// $btn-primary-bg-dark: $white;
+// $btn-secondary-bg: $basic-grey;
+// $btn-secondary-bg-dark: $basic-black;
 
-$primary-20: var(--#{$prefix}primary-20, rgba(#0062bc, 0.2));
-$primary-05: rgba(from $primary r g b / 0.05);
+// $buttons: (
+//   primary: $btn-primary,
+//   primary-pressed: $btn-primary-pressed,
+//   secondary: $btn-secondary,
+//   secondary-hover: $btn-secondary-hover,
+//   secondary-pressed: $btn-secondary-pressed,
+//   primary-bg: $btn-primary-bg,
+//   secondary-bg: $btn-secondary-bg,
+// );
 
-$shadow-neutral: var(--#{$prefix}shadow-neutral, 0 4px 15.9px 0);
-$shadow-strong: var(--#{$prefix}shadow-strong, 0 4px 24.4px 0);
-$shadow-hover: var(--#{$prefix}shadow-hover, 0 4px 26px 0);
-$shadow-low-elevation: var(--#{$prefix}shadow-low-elevation, 0 2px 6px 0);
+// $buttons-dark: (
+//   primary: $btn-primary-dark,
+//   primary-pressed: $btn-primary-pressed-dark,
+//   secondary: $btn-secondary-dark,
+//   secondary-hover: $btn-secondary-hover-dark,
+//   secondary-pressed: $btn-secondary-pressed-dark,
+//   primary-bg: $btn-primary-bg-dark,
+//   secondary-bg: $btn-secondary-bg-dark,
+// );
