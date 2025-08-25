@@ -48,7 +48,9 @@ let setUserTourUri: string
 
 let pretourStep: StepFromJson | undefined
 let pretourConfig: Config | undefined
-let startEventName: string = ''
+const startEventName: string = 'user-menu-event'
+const startEventElementId: string = 'starter'
+
 let askEachTimeUntilCompleted: boolean = false
 
 const completeKey: string = 'COMPLETED'
@@ -269,7 +271,6 @@ async function init(): Promise<void> {
 
   getUserTourUri = getProperty('getUserTourUri') ?? ''
   setUserTourUri = getProperty('setUserTourUri') ?? ''
-  startEventName = getProperty('startEventName') ?? 'launch-starter'
   askEachTimeUntilCompleted = hasProperty('askEachTime')
   configUri = import.meta.env.VITE_BASE_URI + configUri
   const configurationValue:
@@ -331,7 +332,11 @@ async function askForTutorial() {
   enableClickInterception()
 }
 
-async function startTutorial(): Promise<void> {
+async function startTutorial(e: CustomEvent): Promise<void> {
+  if (e.detail.elementId !== startEventElementId) {
+    return
+  }
+
   if (currentDrive?.isActive()) {
     return
   }
