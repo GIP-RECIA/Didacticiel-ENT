@@ -1,8 +1,16 @@
 {
-  "name": "didacticiel-ent",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@gip-recia/didacticiel-ent",
   "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GIP-RECIA/Didacticiel-ENT"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "sass --update --style=expanded src/assets/scss:src/style/css && vite build",
