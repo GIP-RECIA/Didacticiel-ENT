@@ -98,6 +98,7 @@
     }
     h2 {
       margin-top: 0px;
+      color: var(--recia-body-inverted, #fff);
     }
   }
 
@@ -171,101 +172,4 @@
       }
     }
   }
-}
-
-:root {
-  --recia-body: #1e1e1e;
-  --recia-body-inverted: #fff;
-  --recia-body-bg: #fff;
-  --recia-favorite: #ffaa46;
-  --recia-stroke: #e9e9e9;
-  --recia-tutorial: #171717;
-  --recia-basic-grey: #f4f4f4;
-  --recia-basic-black: #1e1e1e;
-  --recia-basic-black-lighter: #737373;
-  --recia-lighter-black: #2c2c2c;
-  --recia-system-blue: #005099;
-  --recia-system-red: #ad1919;
-  --recia-primary: #0062bc;
-  --recia-primary-light: #0062bc;
-  --recia-hover: #f8f8f8;
-  --recia-hover-light: #f8f8f8;
-  --recia-primary-inverted: #57aeff;
-  --recia-primary-dark: #57aeff;
-  --recia-hover-inverted: #262626;
-  --recia-hover-dark: #262626;
-  --recia-default: #858585;
-  --recia-default-hover: #5b5b5b;
-  --recia-default-hover-shadow: rgba(from #161616 r g b/.15);
-  --recia-default-text: #000;
-  --recia-administrationSupport: #ec407a;
-  --recia-administrationSupport-hover: #f60086;
-  --recia-administrationSupport-hover-shadow: rgba(from #ec407a r g b/.2);
-  --recia-administrationSupport-text: #000;
-  --recia-rhGestion: #ab47bc;
-  --recia-rhGestion-hover: #c400f3;
-  --recia-rhGestion-hover-shadow: rgba(from #c400f3 r g b/.1);
-  --recia-rhGestion-text: #fff;
-  --recia-communicationCollaboration: #5747bc;
-  --recia-communicationCollaboration-hover: #665be7;
-  --recia-communicationCollaboration-hover-shadow: rgba(from #665be7 r g b/.15);
-  --recia-communicationCollaboration-text: #fff;
-  --recia-apprentissageSuivi: #ffac2f;
-  --recia-apprentissageSuivi-hover: #f5c72e;
-  --recia-apprentissageSuivi-hover-shadow: rgba(from #9d7a06 r g b/.15);
-  --recia-apprentissageSuivi-text: #000;
-  --recia-citoyensTerritoriaux: #26c6da;
-  --recia-citoyensTerritoriaux-hover: #70eaf5;
-  --recia-citoyensTerritoriaux-hover-shadow: rgba(from #06829d r g b/.15);
-  --recia-citoyensTerritoriaux-text: #000;
-  --recia-documentsRessources: #66bb6a;
-  --recia-documentsRessources-hover: #4ef186;
-  --recia-documentsRessources-hover-shadow: rgba(from #069d28 r g b/.15);
-  --recia-documentsRessources-text: #000;
-  --recia-btn-primary: #fff;
-  --recia-btn-primary-light: #fff;
-  --recia-btn-primary-pressed: #004584;
-  --recia-btn-primary-pressed-light: #004584;
-  --recia-btn-secondary: #1e1e1e;
-  --recia-btn-secondary-light: #1e1e1e;
-  --recia-btn-secondary-hover: #e6eff8;
-  --recia-btn-secondary-hover-light: #e6eff8;
-  --recia-btn-secondary-pressed: #cce0f2;
-  --recia-btn-secondary-pressed-light: #cce0f2;
-  --recia-btn-primary-bg: #1e1e1e;
-  --recia-btn-primary-bg-light: #1e1e1e;
-  --recia-btn-secondary-bg: #f4f4f4;
-  --recia-btn-secondary-bg-light: #f4f4f4;
-  --recia-btn-primary-inverted: #1e1e1e;
-  --recia-btn-primary-dark: #1e1e1e;
-  --recia-btn-primary-pressed-inverted: #8ac7ff;
-  --recia-btn-primary-pressed-dark: #8ac7ff;
-  --recia-btn-secondary-inverted: #fff;
-  --recia-btn-secondary-dark: #fff;
-  --recia-btn-secondary-hover-inverted: #1a1f23;
-  --recia-btn-secondary-hover-dark: #1a1f23;
-  --recia-btn-secondary-pressed-inverted: #212e3a;
-  --recia-btn-secondary-pressed-dark: #212e3a;
-  --recia-btn-primary-bg-inverted: #fff;
-  --recia-btn-primary-bg-dark: #fff;
-  --recia-btn-secondary-bg-inverted: #1e1e1e;
-  --recia-btn-secondary-bg-dark: #1e1e1e;
-  --recia-shadow-neutral: 0 4px 15.9px 0;
-  --recia-shadow-strong: 0 4px 24.4px 0;
-  --recia-shadow-hover: 0 4px 26px 0;
-  --recia-shadow-low-elevation: 0 2px 6px 0;
-  --recia-shadow-low-elevation-avatar-notif: 0 1px 24px 0;
-  --recia-font-size-base: 1rem;
-  --recia-body-font-size: calc(var(--recia-font-size-base) * 0.75);
-  --recia-font-size-xxs: calc(var(--recia-font-size-base) * 0.625);
-  --recia-font-size-xs: calc(var(--recia-font-size-base) * 0.75);
-  --recia-font-size-sm: calc(var(--recia-font-size-base) * 0.875);
-  --recia-font-size-md: calc(var(--recia-font-size-base) * 1);
-  --recia-font-size-lg: calc(var(--recia-font-size-base) * 1.125);
-  --recia-font-size-xl: calc(var(--recia-font-size-base) * 1.25);
-  --recia-font-size-xxl: calc(var(--recia-font-size-base) * 1.5);
-  --recia-font-size-h1: calc(var(--recia-font-size-base) * 1.25);
-  --recia-font-size-h2: calc(var(--recia-font-size-base) * 1.125);
-  --recia-font-size-h3: calc(var(--recia-font-size-base) * 1);
-  --recia-font-size-h4: calc(var(--recia-font-size-base) * 0.875);
 }
