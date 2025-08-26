@@ -118,8 +118,9 @@ async function enableClickInterceptionPopover() {
     const btns = document.querySelectorAll('.driver-popover-navigation-btns button')
     btns.forEach((elem) => {
       elem.addEventListener('keyup', (e) => {
-        if (e.key !== 'Tab')
-          e.stopPropagation()
+        const kbe = e as KeyboardEvent
+        if (kbe.key !== 'Tab')
+          kbe.stopPropagation()
         // e.preventDefault()
       }, { capture: true, once: false })
     })
@@ -332,9 +333,12 @@ async function askForTutorial() {
   enableClickInterception()
 }
 
-async function startTutorial(e: CustomEvent): Promise<void> {
-  if (e.detail.elementId !== startEventElementId) {
-    return
+async function startTutorial(e: Event | undefined): Promise<void> {
+  if (e !== undefined) {
+    const customEvent = e as CustomEvent
+    if (customEvent.detail.elementId !== startEventElementId) {
+      return
+    }
   }
 
   if (currentDrive?.isActive()) {
@@ -374,7 +378,7 @@ function preTourCreateStep(stepFromJson: StepFromJson): DriveStep {
       onNextClick: async () => {
         currentDrive?.destroy()
         disableClickInterception()
-        startTutorial()
+        startTutorial(undefined)
       },
       onPrevClick: async () => {
         currentDrive?.destroy()
