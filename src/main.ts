@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-import type { JWT } from '@uportal/open-id-connect'
 import type { Alignment, AllowedButtons, Config, Driver, DriveStep, Side, State } from 'driver.js'
 import { driver } from 'driver.js'
 import { querySelectorDeep } from 'query-selector-shadow-dom'
-import { getToken } from './services/soffitUtils'
 import 'driver.js/dist/driver.css'
 import './style/css/global.css'
 import 'regenerator-runtime'
@@ -294,7 +292,7 @@ async function init(): Promise<void> {
   // WIP: for now the tutorial open each time
   const userTutorialData: UserTour | undefined = await getUserTourComplete()
   if (userTutorialData?.tutorial?.includes(completeKey)) {
-    // return
+    return
   }
   if (userTutorialData?.tutorial?.includes(deniedKey) && !askEachTimeUntilCompleted) {
     return
@@ -302,6 +300,7 @@ async function init(): Promise<void> {
 
   // for test only, to no display tutorial to everyone when they open the portal page
 
+  /*
   const token: { encoded: string, decoded: JWT } = await getToken(
     import.meta.env.VITE_USER_TOKEN_URI,
   )
@@ -310,6 +309,8 @@ async function init(): Promise<void> {
   if (allowedUsers.includes(token.decoded.sub)) {
     askForTutorial()
   }
+  */
+  askForTutorial()
 }
 
 async function askForTutorial() {
