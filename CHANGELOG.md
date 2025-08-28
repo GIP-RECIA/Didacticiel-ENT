@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.2](https://github.com/GIP-RECIA/Didacticiel-ENT/compare/didacticiel-ent/v1.0.1...didacticiel-ent/v1.0.2) (2025-08-28)
+
+
+### Bug Fixes
+
+* fix scroll still disabled when completing from the first tour ([cb2617c](https://github.com/GIP-RECIA/Didacticiel-ENT/commit/cb2617cbe08d6ef44907f2f57b0d4aa101e6db17))
+
 ## [1.0.1](https://github.com/GIP-RECIA/Didacticiel-ENT/compare/didacticiel-ent/v1.0.0...didacticiel-ent/v1.0.1) (2025-08-28)
 
 
