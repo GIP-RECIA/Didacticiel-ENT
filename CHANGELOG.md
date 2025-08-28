@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.1](https://github.com/GIP-RECIA/Didacticiel-ENT/compare/didacticiel-ent/v1.0.0...didacticiel-ent/v1.0.1) (2025-08-28)
+
+
+### Bug Fixes
+
+* scope buttons style and change css directory ([01ca913](https://github.com/GIP-RECIA/Didacticiel-ENT/commit/01ca9137fab6e1359e6ce70c99c3736cd35169ae))
+
 ## 1.0.0 (2025-08-26)
 
 
