@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.3](https://github.com/GIP-RECIA/Didacticiel-ENT/compare/didacticiel-ent/v1.0.2...didacticiel-ent/v1.0.3) (2025-08-28)
+
+
+### Bug Fixes
+
+* hide scrollbar when not required ([d67f809](https://github.com/GIP-RECIA/Didacticiel-ENT/commit/d67f809743a6fecba0d1f6eafd3877275ab2a2b5))
+* replace offsetParent with getAttribute since behavior is different depending of browser ([8b859f2](https://github.com/GIP-RECIA/Didacticiel-ENT/commit/8b859f2729cbaa7839c798cd3d7e9a8b78ec711f))
+
 ## [1.0.2](https://github.com/GIP-RECIA/Didacticiel-ENT/compare/didacticiel-ent/v1.0.1...didacticiel-ent/v1.0.2) (2025-08-28)
 
 
