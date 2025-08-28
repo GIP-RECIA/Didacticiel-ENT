@@ -106,12 +106,13 @@
     font-family: 'DM Sans';
   }
   .driver-popover-description {
+    overflow-y: auto;
+    overflow-x: hidden;
     color: var(--recia-body-inverted, #fff) !important ;
     opacity: 0.8;
     font-size: var(--recia-font-size-md, 1rem);
     line-height: var(--recia-font-size-xl, 1.25rem);
     height: calc(var(--recia-font-size-xl, 1.25rem) * 6); // mobile only
-    overflow: scroll; //mobile only
     span {
       &.blue {
         color: var(--recia-primary-dark, #57aeff);
