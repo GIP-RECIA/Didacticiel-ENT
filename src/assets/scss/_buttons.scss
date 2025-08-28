@@ -25,149 +25,150 @@
   font-weight: 600;
   font-size: var(--#{$prefix}font-size-md);
 }
-
-.btn {
-  &-primary {
-    @extend %primary-secondary;
-    background-color: var(--#{$prefix}btn-primary-bg-dark);
-    color: var(--#{$prefix}btn-primary-dark);
-
-    &:active {
-      background-color: var(--#{$prefix}btn-primary-pressed-dark) !important;
-    }
-
-    &:hover,
-    &:focus-visible {
-      background-color: var(--#{$prefix}primary-dark);
-    }
-
-    &:focus-visible {
-      outline: 4px solid HEXToRGBA(var(--#{$prefix}primary-dark), 0.3);
-    }
-
-    &:disabled,
-    &.disabled {
-      opacity: 0.33;
-      pointer-events: none;
-    }
-
-    &.circle {
-      border-radius: 50%;
-      width: 44px;
-      height: 44px;
-      padding: 12px;
-    }
-
-    &.small {
-      padding: 8px 16px;
-      font-size: var(--#{$prefix}font-size-sm);
-
-      &.circle {
-        border-radius: 50%;
-        width: 34px;
-        height: 34px;
-        padding: 8px;
-      }
-    }
-  }
-
-  &-secondary {
-    @extend %primary-secondary;
-    background-color: var(--#{$prefix}btn-secondary-bg-dark);
-    color: var(--#{$prefix}btn-secondary-dark);
-
-    &:active {
-      background-color: var(--#{$prefix}btn-secondary-pressed) !important;
-      color: var(--#{$prefix}primary-dark) !important;
-    }
-
-    &:hover,
-    &:focus-visible {
-      background-color: var(--#{$prefix}btn-secondary-hover-dark);
-      color: var(--#{$prefix}primary-dark);
-    }
-
-    &:focus-visible {
-      outline: 4px solid var(--#{$prefix}primary-dark);
-    }
-
-    &:disabled,
-    &.disabled {
-      opacity: 0.33;
-      pointer-events: none;
-    }
-
-    &.circle {
-      border-radius: 50%;
-      width: 44px;
-      height: 44px;
-      padding: 12px;
-    }
-
-    &.small {
-      padding: 8px 16px;
-      font-size: var(--#{$prefix}font-size-sm);
-
-      &.circle {
-        border-radius: 50%;
-        width: 34px;
-        height: 34px;
-        padding: 8px;
-      }
-    }
-  }
-
-  &-secondary-toggle {
-    @extend .btn-secondary;
-    background-color: unset;
-    color: var(--#{$prefix}btn-secondary-dark);
-
-    &.active {
-      background-color: var(--#{$prefix}primary-dark);
-      color: var(--#{$prefix}body-inverted);
-      box-shadow: var(--#{$prefix}shadow-hover) HEXToRGBA(var(--#{$prefix}primary-dark), 0.2);
+.driver-popover {
+  .btn {
+    &-primary {
+      @extend %primary-secondary;
+      background-color: var(--#{$prefix}btn-primary-bg-dark);
+      color: var(--#{$prefix}btn-primary-dark);
 
       &:active {
         background-color: var(--#{$prefix}btn-primary-pressed-dark) !important;
-        color: var(--#{$prefix}btn-primary-dark) !important;
+      }
+
+      &:hover,
+      &:focus-visible {
+        background-color: var(--#{$prefix}primary-dark);
       }
 
       &:focus-visible {
         outline: 4px solid HEXToRGBA(var(--#{$prefix}primary-dark), 0.3);
       }
+
+      &:disabled,
+      &.disabled {
+        opacity: 0.33;
+        pointer-events: none;
+      }
+
+      &.circle {
+        border-radius: 50%;
+        width: 44px;
+        height: 44px;
+        padding: 12px;
+      }
+
+      &.small {
+        padding: 8px 16px;
+        font-size: var(--#{$prefix}font-size-sm);
+
+        &.circle {
+          border-radius: 50%;
+          width: 34px;
+          height: 34px;
+          padding: 8px;
+        }
+      }
     }
-  }
 
-  &-tertiary {
-    @include button-and-tag;
-    padding: 8px 16px;
-    font-family: $dm-sans;
-    font-weight: 600;
-    font-size: var(--#{$prefix}font-size-sm);
-    color: var(--#{$prefix}btn-secondary-dark);
+    &-secondary {
+      @extend %primary-secondary;
+      background-color: var(--#{$prefix}btn-secondary-bg-dark);
+      color: var(--#{$prefix}btn-secondary-dark);
 
-    &:hover,
-    &:focus-visible {
-      background-color: var(--#{$prefix}body-bg-dark);
-      color: var(--#{$prefix}primary);
-      text-decoration: underline;
+      &:active {
+        background-color: var(--#{$prefix}btn-secondary-pressed) !important;
+        color: var(--#{$prefix}primary-dark) !important;
+      }
+
+      &:hover,
+      &:focus-visible {
+        background-color: var(--#{$prefix}btn-secondary-hover-dark);
+        color: var(--#{$prefix}primary-dark);
+      }
+
+      &:focus-visible {
+        outline: 4px solid var(--#{$prefix}primary-dark);
+      }
+
+      &:disabled,
+      &.disabled {
+        opacity: 0.33;
+        pointer-events: none;
+      }
+
+      &.circle {
+        border-radius: 50%;
+        width: 44px;
+        height: 44px;
+        padding: 12px;
+      }
+
+      &.small {
+        padding: 8px 16px;
+        font-size: var(--#{$prefix}font-size-sm);
+
+        &.circle {
+          border-radius: 50%;
+          width: 34px;
+          height: 34px;
+          padding: 8px;
+        }
+      }
     }
 
-    &:focus-visible {
-      outline: 4px solid var(--#{$prefix}primary-dark);
+    &-secondary-toggle {
+      @extend .btn-secondary;
+      background-color: unset;
+      color: var(--#{$prefix}btn-secondary-dark);
+
+      &.active {
+        background-color: var(--#{$prefix}primary-dark);
+        color: var(--#{$prefix}body-inverted);
+        box-shadow: var(--#{$prefix}shadow-hover) HEXToRGBA(var(--#{$prefix}primary-dark), 0.2);
+
+        &:active {
+          background-color: var(--#{$prefix}btn-primary-pressed-dark) !important;
+          color: var(--#{$prefix}btn-primary-dark) !important;
+        }
+
+        &:focus-visible {
+          outline: 4px solid HEXToRGBA(var(--#{$prefix}primary-dark), 0.3);
+        }
+      }
     }
 
-    &:disabled,
-    &.disabled {
-      opacity: 0.5;
-      pointer-events: none;
-    }
+    &-tertiary {
+      @include button-and-tag;
+      padding: 8px 16px;
+      font-family: $dm-sans;
+      font-weight: 600;
+      font-size: var(--#{$prefix}font-size-sm);
+      color: var(--#{$prefix}btn-secondary-dark);
 
-    &.circle {
-      border-radius: 50%;
-      width: 34px;
-      height: 34px;
-      padding: 8px;
+      &:hover,
+      &:focus-visible {
+        background-color: var(--#{$prefix}body-bg-dark);
+        color: var(--#{$prefix}primary);
+        text-decoration: underline;
+      }
+
+      &:focus-visible {
+        outline: 4px solid var(--#{$prefix}primary-dark);
+      }
+
+      &:disabled,
+      &.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+      &.circle {
+        border-radius: 50%;
+        width: 34px;
+        height: 34px;
+        padding: 8px;
+      }
     }
   }
 }

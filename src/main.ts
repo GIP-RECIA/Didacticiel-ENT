@@ -18,7 +18,7 @@ import type { Alignment, AllowedButtons, Config, Driver, DriveStep, Side, State 
 import { driver } from 'driver.js'
 import { querySelectorDeep } from 'query-selector-shadow-dom'
 import 'driver.js/dist/driver.css'
-import './style/css/global.css'
+import './assets/css/global.css'
 import 'regenerator-runtime'
 
 declare global {

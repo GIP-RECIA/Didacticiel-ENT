@@ -13,11 +13,11 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "sass --update --style=expanded src/assets/scss:src/style/css && vite build",
+    "build": "sass --style=compressed --error-css src/assets/scss/:src/assets/css/ && vite build",
     "preview": "vite preview",
     "postinstall": "husky",
     "release": "yarn run -T commit-and-tag-version -t 'didacticiel-ent/v' --path . --release-as $1 || echo 'Please specify a version type (yarn run release -- [patch, minor, major])'",
-    "sass-dev": "sass --watch --update --style=expanded src/assets/scss:src/style/css"
+    "sass-dev": "sass --watch --update src/assets/scss/:src/assets/css/"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.13.2",
