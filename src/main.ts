@@ -377,11 +377,13 @@ function preTourCreateStep(stepFromJson: StepFromJson): DriveStep {
       title: getTitle(stepFromJson.title),
       description: stepFromJson.description,
       onNextClick: async () => {
+        resetStyleOverflow()
         currentDrive?.destroy()
         disableClickInterception()
         startTutorial(undefined)
       },
       onPrevClick: async () => {
+        resetStyleOverflow()
         currentDrive?.destroy()
         setUserTourDenied()
         disableClickInterception()
