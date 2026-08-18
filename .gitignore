@@ -18,15 +18,11 @@ dist-ssr
 coverage
 .env
 *.local
-public/*.json
-*.css*
-
 
 ### Tests ###
 playwright-report
 test-results
 results.json
-json-server
 
 ### Logs ###
 logs
@@ -37,4 +33,3 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-

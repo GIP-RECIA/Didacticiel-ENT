@@ -14,17 +14,64 @@
  * limitations under the License.
  */
 
-@use 'variables' as *;
 @use 'sass:map';
-@use 'buttons';
-// @use 'style';
+@use 'sass:meta';
+@use '@gip-recia/ui/core/variables' as *;
+@use '@gip-recia/ui/functions' as *;
+@use '@gip-recia/ui/mixins' as *;
+
+@import 'driver.js/dist/driver.css';
+
+body {
+  @each $domain, $data in $domain-theme {
+    &.#{'#{$prefix}theme-#{map.get($data, id)}'} .driver-popover {
+      @each $color, $value in map.get($data, theme-colors-dark) {
+        --#{$prefix}#{$color}: #{$value};
+      }
+
+      @each $color, $value in map.get($data, theme-colors) {
+        --#{$prefix}#{$color}-inverted: #{$value};
+      }
+
+      @each $color, $value in map.get($data, buttons-dark) {
+        --#{$prefix}btn-#{$color}: #{$value};
+      }
+
+      @each $color, $value in map.get($data, buttons) {
+        --#{$prefix}btn-#{$color}-inverted: #{$value};
+      }
+    }
+  }
+}
 
 .driver-popover {
+  --#{$prefix}body: #{$body-dark};
+  --#{$prefix}body-inverted: #{$body-inverted-dark};
+  --#{$prefix}body-bg: #{$body-bg-dark};
+
+  @each $color, $value in $theme-colors-dark {
+    --#{$prefix}#{$color}: #{$value};
+  }
+
+  @each $color, $value in $theme-colors {
+    --#{$prefix}#{$color}-inverted: #{$value};
+  }
+
+  @each $color, $value in $buttons-dark {
+    --#{$prefix}btn-#{$color}: #{$value};
+  }
+
+  @each $color, $value in $buttons {
+    --#{$prefix}btn-#{$color}-inverted: #{$value};
+  }
+
+  @include meta.load-css('@gip-recia/ui/components/buttons');
+
   border-radius: 16px;
   background-color: black !important;
 
   .driver-popover-arrow-side-left.driver-popover-arrow {
-    border-left-color: black !important ;
+    border-left-color: black !important;
   }
 
   .driver-popover-arrow-side-right.driver-popover-arrow {
@@ -36,14 +83,15 @@
   }
 
   .driver-popover-arrow-side-bottom.driver-popover-arrow {
-    border-bottom-color: black !important ;
+    border-bottom-color: black !important;
   }
 
   padding: 12px;
 
-  background-color: var(--recia-body-bg, #fff);
-  color: var(--recia-body-inverted, #fff) !important ;
-  @media (width >= map.get($grid-breakpoints, md)) {
+  background-color: var(--#{$prefix}body-bg);
+  color: var(--#{$prefix}body) !important;
+
+  @media (width >=map.get($grid-breakpoints, md)) {
     padding: 34px; // 34 sur PC
     max-width: 500px;
   }
@@ -60,13 +108,14 @@
     .toRight {
       display: flex;
       justify-content: space-between;
+
       // align-items: start;
       #r-driver-icon {
         width: 28px;
         height: 28px;
         margin: 2px;
         font-family: 'Font Awesome 6 Free';
-        color: var(--recia-primary, blue);
+        color: var(--#{$prefix}primary);
         font-size: 26px;
       }
 
@@ -84,47 +133,51 @@
         margin-left: auto;
 
         svg {
-          fill: var(--recia-basic-black-lighter, #737373) !important ;
+          fill: var(--#{$prefix}basic-black-lighter) !important;
           width: 20px;
           height: 20px;
           align-self: center;
           justify-self: center;
           outline: none;
         }
+
         &:focus-visible {
-          outline: solid var(--recia-primary) 2px;
+          outline: solid var(--#{$prefix}primary) 2px;
         }
       }
     }
+
     h2 {
       margin-top: 0px;
-      color: var(--recia-body-inverted, #fff);
+      color: var(--#{$prefix}body);
     }
   }
 
   * {
     font-family: 'DM Sans';
   }
+
   .driver-popover-description {
     overflow-y: auto;
     overflow-x: hidden;
-    color: var(--recia-body-inverted, #fff) !important ;
+    color: var(--#{$prefix}body) !important;
     opacity: 0.8;
-    font-size: var(--recia-font-size-md, 1rem);
-    line-height: var(--recia-font-size-xl, 1.25rem);
-    height: calc(var(--recia-font-size-xl, 1.25rem) * 6); // mobile only
+    font-size: var(--#{$prefix}font-size-md);
+    line-height: var(--#{$prefix}font-size-xl);
+    height: calc(var(--#{$prefix}font-size-xl, 1.25rem) * 6); // mobile only
+
     span {
       &.blue {
-        color: var(--recia-primary-dark, #57aeff);
+        color: var(--#{$prefix}primary-dark, #57aeff);
       }
     }
   }
 
   .driver-popover-footer {
     .driver-popover-progress-text {
-      color: var(--recia-body-inverted, #fff) !important ;
+      color: var(--#{$prefix}body) !important;
       font-weight: bold;
-      font-size: var(--recia-font-size-sm, 0.875rem);
+      font-size: var(--#{$prefix}font-size-sm);
       white-space: preserve nowrap;
     }
 
@@ -134,7 +187,7 @@
     flex-direction: column;
     gap: 10px;
 
-    @media (width >= map.get($grid-breakpoints, md)) {
+    @media (width >=map.get($grid-breakpoints, md)) {
       flex-direction: row;
       padding-top: 24px; //24 PC only
 
@@ -145,6 +198,7 @@
     .driver-popover-navigation-btns {
       align-self: center;
       gap: 12px;
+
       @media (width < map.get($grid-breakpoints, md)) {
         width: 100%; // mobile only
         flex-direction: column;
@@ -169,6 +223,7 @@
         i {
           font-family: 'Font Awesome 6 Free';
         }
+
         border: none;
       }
     }

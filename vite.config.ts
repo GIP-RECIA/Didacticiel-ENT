@@ -17,27 +17,29 @@
 /* eslint-disable node/prefer-global/process */
 import type { ConfigEnv } from 'vite'
 import { defineConfig, loadEnv } from 'vite'
-import { name } from './package.json'
+import { name } from './package.json' with { type: 'json' }
 
 // https://vitejs.dev/config/
 export default ({ mode }: ConfigEnv) => {
-  process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
+  const env = loadEnv(mode, process.cwd())
+
+  const { VITE_BASE_URI, VITE_ALLOWED_HOSTS } = env
 
   return defineConfig({
-    base: process.env.VITE_BASE_URI,
+    base: VITE_BASE_URI,
+    server: {
+      allowedHosts: JSON.parse(VITE_ALLOWED_HOSTS ?? '[]'),
+    },
     build: {
+      sourcemap: true,
       lib: {
         entry: './src/main.ts',
         formats: ['es'],
         name,
       },
-      sourcemap: true,
-    },
-    server: {
-      allowedHosts: true,
     },
     define: {
-      'process.env': { NODE_ENV: process.env.NODE_ENV },
+      'process.env.NODE_ENV': JSON.stringify(mode),
     },
   })
 }

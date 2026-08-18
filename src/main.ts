@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-import type { Alignment, AllowedButtons, Config, Driver, DriveStep, Side, State } from 'driver.js'
+import type {
+  Alignment,
+  AllowedButtons,
+  Config,
+  Driver,
+  DriveStep,
+  Side,
+  State,
+} from 'driver.js'
 import { driver } from 'driver.js'
 import { querySelectorDeep } from 'query-selector-shadow-dom'
-import 'driver.js/dist/driver.css'
-import './assets/css/global.css'
+import './assets/scss/global.scss'
 import 'regenerator-runtime'
 
 declare global {
@@ -146,14 +153,19 @@ const breakpoints: Map<BreakpointsKeys, number> = new Map([
   ['xxl', 1400],
 ])
 
-function _getIcon(icon: string): string {
+function _getIcon(
+  icon: string,
+): string {
   return `<i id="r-driver-icon" class="${icon}"></i>`
 }
 
 function getBtnClose(): string {
   return '<button id="r-close" src="https://placehold.co/20"><svg class="fontawesome" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg></button>'
 }
-function getTitle(title: string, tourConfig?: Config): string {
+function getTitle(
+  title: string,
+  tourConfig?: Config,
+): string {
   return `<div class="toRight">${tourConfig?.allowClose ? getBtnClose() : ''}</div><h2>${title}</h2>`
 }
 
@@ -253,11 +265,15 @@ async function setUserTourDenied() {
   }
 }
 
-function getProperty(property: string): string | undefined {
+function getProperty(
+  property: string,
+): string | undefined {
   return document.querySelector('script#didacticiel-ent')?.getAttribute(property) ?? undefined
 }
 
-function hasProperty(property: string): boolean {
+function hasProperty(
+  property: string,
+): boolean {
   return !!document.querySelector('script#didacticiel-ent')?.getAttribute(property)
 }
 
@@ -272,9 +288,12 @@ async function init(): Promise<void> {
   setUserTourUri = getProperty('setUserTourUri') ?? ''
   askEachTimeUntilCompleted = hasProperty('askEachTime')
   configUri = import.meta.env.VITE_BASE_URI + configUri
-  const configurationValue:
-    { tourConfig: Config, stepsConfig: StepFromJson[], pretourStepConfig: StepFromJson, pretourConfig: Config }
-    | undefined = await getConfJson(configUri)
+  const configurationValue: {
+    tourConfig: Config
+    stepsConfig: StepFromJson[]
+    pretourStepConfig: StepFromJson
+    pretourConfig: Config
+  } | undefined = await getConfJson(configUri)
 
   if (configurationValue === undefined) {
     console.error('No configuration for Didacticiel ENT')
@@ -294,7 +313,10 @@ async function init(): Promise<void> {
   if (userTutorialData?.tutorial?.includes(completeKey)) {
     return
   }
-  if (userTutorialData?.tutorial?.includes(deniedKey) && !askEachTimeUntilCompleted) {
+  if (
+    userTutorialData?.tutorial?.includes(deniedKey)
+    && !askEachTimeUntilCompleted
+  ) {
     return
   }
 
@@ -314,7 +336,10 @@ async function init(): Promise<void> {
 }
 
 async function askForTutorial() {
-  if (pretourConfig === undefined || pretourStep === undefined) {
+  if (
+    pretourConfig === undefined
+    || pretourStep === undefined
+  ) {
     console.error('Incorrect configuration for tutorial')
     return
   }
@@ -334,7 +359,9 @@ async function askForTutorial() {
   enableClickInterception()
 }
 
-async function startTutorial(e: Event | undefined): Promise<void> {
+async function startTutorial(
+  e: Event | undefined,
+): Promise<void> {
   if (e !== undefined) {
     const customEvent = e as CustomEvent
     if (customEvent.detail.elementId !== startEventElementId) {
@@ -346,14 +373,25 @@ async function startTutorial(e: Event | undefined): Promise<void> {
     return
   }
 
-  if (tourConfig === undefined || steps === undefined || steps.length === 0) {
+  if (
+    tourConfig === undefined
+    || steps === undefined
+    || steps.length === 0
+  ) {
     console.error('Incorrect configuration for tutorial')
     return
   }
   tourConfig.steps = []
 
   for (let index = 0; index < steps.length; index++) {
-    tourConfig.steps.push(createStep(steps[index], steps[index + 1], steps[index - 1], tourConfig))
+    tourConfig.steps.push(
+      createStep(
+        steps[index],
+        steps[index + 1],
+        steps[index - 1],
+        tourConfig,
+      ),
+    )
   }
   tourConfig.smoothScroll = true
   tourConfig.disableActiveInteraction = true
@@ -369,7 +407,9 @@ async function startTutorial(e: Event | undefined): Promise<void> {
   enableClickInterception()
 }
 
-function preTourCreateStep(stepFromJson: StepFromJson): DriveStep {
+function preTourCreateStep(
+  stepFromJson: StepFromJson,
+): DriveStep {
   return {
     element: undefined,
     popover: {
@@ -392,7 +432,12 @@ function preTourCreateStep(stepFromJson: StepFromJson): DriveStep {
   }
 }
 
-function createStep(stepFromJson: StepFromJson, nextStep: StepFromJson | undefined, previousStep: StepFromJson | undefined, tourConfig: Config | undefined): DriveStep {
+function createStep(
+  stepFromJson: StepFromJson,
+  nextStep: StepFromJson | undefined,
+  previousStep: StepFromJson | undefined,
+  tourConfig: Config | undefined,
+): DriveStep {
   const isMobile = window.innerWidth < breakpoints.get('lg')! // if < lg
   return {
     element: querySelectorDeep(stepFromJson.element) ?? undefined,
@@ -405,9 +450,13 @@ function createStep(stepFromJson: StepFromJson, nextStep: StepFromJson | undefin
       align: isMobile ? stepFromJson.alignMobile : stepFromJson.align,
 
       onNextClick: async (
-        element?: Element,
+        element: Element | undefined,
         step: DriveStep,
-        options: { config: Config, state: State, driver: Driver },
+        options: {
+          config: Config
+          state: State
+          driver: Driver
+        },
       ) => {
         // prevent fast multi click to affect behavior
         // this is used only in onNextClick and onPrevClick
@@ -440,7 +489,7 @@ function createStep(stepFromJson: StepFromJson, nextStep: StepFromJson | undefin
         isProcessingClic = false
       },
       onPrevClick: async (
-        element?: Element,
+        element: Element | undefined,
         step: DriveStep,
         options: { config: Config, state: State, driver: Driver },
       ) => {
@@ -477,7 +526,11 @@ function createStep(stepFromJson: StepFromJson, nextStep: StepFromJson | undefin
   }
 }
 
-function waitForElement(selector: string, timeout = 3000, negativeSelector?: string): Promise<HTMLElement> {
+function waitForElement(
+  selector: string,
+  timeout = 3000,
+  negativeSelector?: string,
+): Promise<HTMLElement> {
   // negative selector is used when waiting for the previous popover to be destoyed, and the new one to be created,
   // the new one will be lacking a class, so negative selector allow us to know its the new one we're finding
   return new Promise((resolve, reject) => {
@@ -485,7 +538,15 @@ function waitForElement(selector: string, timeout = 3000, negativeSelector?: str
     let timePassed = 0
     const interval = setInterval(async () => {
       const element = querySelectorDeep(selector)
-      if (element !== null && element.parentElement?.getAttribute('display') !== 'none' !== null && (negativeSelector ? !element.matches(negativeSelector) : true)) {
+      if (
+        element !== null
+        && element.parentElement?.getAttribute('display') !== 'none' !== null
+        && (
+          negativeSelector
+            ? !element.matches(negativeSelector)
+            : true
+        )
+      ) {
         clearInterval(interval)
         await new Promise(r => setTimeout(r, 150))
         resolve(element)
@@ -505,7 +566,12 @@ function waitForElement(selector: string, timeout = 3000, negativeSelector?: str
 
 async function getConfJson(
   url: string,
-): Promise<{ tourConfig: Config, stepsConfig: StepFromJson[], pretourStepConfig: StepFromJson, pretourConfig: Config } | undefined> {
+): Promise<{
+  tourConfig: Config
+  stepsConfig: StepFromJson[]
+  pretourStepConfig: StepFromJson
+  pretourConfig: Config
+} | undefined> {
   try {
     const response = await fetch(url)
     if (!response.ok) {
@@ -514,7 +580,12 @@ async function getConfJson(
 
     const json = await response.json()
 
-    const values: { tourConfig: Config, stepsConfig: StepFromJson[], pretourStepConfig: StepFromJson, pretourConfig: Config } = json
+    const values: {
+      tourConfig: Config
+      stepsConfig: StepFromJson[]
+      pretourStepConfig: StepFromJson
+      pretourConfig: Config
+    } = json
     return values
   }
   catch (error: any) {
@@ -523,7 +594,9 @@ async function getConfJson(
 }
 
 // wait for dom to be loaded before invoking callback
-function onDOMContentLoaded(callback: (() => void) | (() => Promise<void>)): void {
+function onDOMContentLoaded(
+  callback: (() => void) | (() => Promise<void>),
+): void {
   // if DOM is still loading
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', callback)
