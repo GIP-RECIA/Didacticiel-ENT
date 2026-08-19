@@ -2,6 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.4](https://github.com/GIP-RECIA/Didacticiel-ENT/compare/didacticiel-ent/v1.0.3...didacticiel-ent/v1.0.4) (2026-08-19)
 ## [1.0.3](https://github.com/GIP-RECIA/Didacticiel-ENT/compare/didacticiel-ent/v1.0.2...didacticiel-ent/v1.0.3) (2025-08-28)
 
 

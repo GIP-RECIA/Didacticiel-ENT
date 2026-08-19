@@ -1,7 +1,7 @@
 {
   "name": "@gip-recia/didacticiel-ent",
   "type": "module",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "packageManager": "yarn@4.18.0",
   "license": "Apache-2.0",
   "repository": {
