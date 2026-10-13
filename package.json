@@ -2,7 +2,7 @@
   "name": "@gip-recia/didacticiel-ent",
   "type": "module",
   "version": "1.0.4",
-  "packageManager": "yarn@4.18.0",
+  "packageManager": "yarn@4.18.1",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -11,6 +11,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
