@@ -26,7 +26,7 @@
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
     "@gip-recia/ui": "^1.1.0",
-    "@types/node": "^24",
+    "@types/node": "^26",
     "@types/query-selector-shadow-dom": "^1.0.4",
     "@typescript/native": "npm:typescript@^7.0.2",
     "@uportal/open-id-connect": "^1.40.2",
