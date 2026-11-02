@@ -1,0 +1,98 @@
+# For more information see: https://docs.github.com/en/actions/
+
+name: Project CI
+
+on:
+  push:
+    branches: [ 'main' ]
+    paths: [ '**.ts', '.github/workflows/**', 'package.json', 'yarn.lock' ]
+  pull_request:
+    branches: [ 'main' ]
+    paths: [ '**.ts', '.github/workflows/**', 'package.json', 'yarn.lock' ]
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+
+    name: Check diffs
+
+    outputs:
+      node: ${{ steps.check-node.outputs.changed }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+
+      - name: node
+        id: check-node
+        run: |
+          if git diff --name-only HEAD^ HEAD | grep -qE '\.ts$||package\.json|yarn\.lock'; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Debug outputs
+        run: |
+          git diff --name-only HEAD^ HEAD
+          echo "Node changes: ${{ steps.check-node.outputs.changed }}"
+
+  license-headers:
+    runs-on: ubuntu-latest
+
+    name: Check and generate license headers
+
+    needs: changes
+
+    continue-on-error: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Check license headers
+        id: check
+        run: ./scripts/license.sh 1
+
+      - name: Generate license headers
+        if: ${{ github.event_name != 'pull_request' && needs.changes.outputs.node == 'true' && steps.check.conclusion == 'failure' }}
+        id: generate
+        run: ./scripts/license.sh 2
+
+      - name: Commit changes
+        if: ${{ github.event_name != 'pull_request' && steps.generate.conclusion == 'success' }}
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          ./scripts/license.sh 3
+
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [ '24', 'latest' ]
+
+    name: Node ${{ matrix.node-version }}
+
+    needs: changes
+
+    if: ${{ github.event_name != 'pull_request' || needs.changes.outputs.node == 'true' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Use Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build frontend
+        run: yarn build
